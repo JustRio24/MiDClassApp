@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@drawable/bg_dashboard_mhs">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <!-- Header Presensi -->
+        <TextView
+            android:id="@+id/headerPresensi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Formulir Presensi"
+            android:textSize="25sp"
+            android:padding="10dp"
+            android:fontFamily="monospace"
+            android:textStyle="bold"
+            android:background="@color/biru_muda"
+            android:textAlignment="center"
+            android:textColor="@android:color/black" />
+
+        <!-- Pilihan Mata Kuliah -->
+        <TextView
+            android:id="@+id/labelMatkul"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pilih Mata Kuliah"
+            android:fontFamily="monospace"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:background="@color/pink_muda1"
+            android:layout_marginTop="20dp"
+            android:padding="10dp" />
+
+        <Spinner
+            android:id="@+id/spinnerMatkul"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/pink_muda2"
+            android:entries="@array/matkul_array"
+            android:layout_marginBottom="20dp"/>
+
+        <!-- Pilihan Keterangan Kehadiran -->
+        <TextView
+            android:id="@+id/labelKeterangan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pilih Keterangan Kehadiran"
+            android:fontFamily="monospace"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:background="@color/pink_muda1"
+            android:layout_marginTop="20dp"
+            android:padding="10dp" />
+
+        <RadioGroup
+            android:id="@+id/radioGroupKeterangan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/pink_muda2">
+
+            <RadioButton
+                android:id="@+id/radioHadir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hadir"
+                android:fontFamily="casual"
+                android:textStyle="bold"
+                android:checked="true"/>
+
+            <RadioButton
+                android:id="@+id/radioSakit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="casual"
+                android:textStyle="bold"
+                android:text="Sakit" />
+
+            <RadioButton
+                android:id="@+id/radioIzin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="casual"
+                android:textStyle="bold"
+                android:text="Izin" />
+        </RadioGroup>
+
+        <!-- Upload Foto -->
+        <TextView
+            android:id="@+id/labelFoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Unggah Bukti Kehadiran (Opsional)"
+            android:fontFamily="monospace"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            android:paddingBottom="10dp" />
+
+        <ImageView
+            android:id="@+id/imagePreview"
+            android:layout_width="230dp"
+            android:layout_height="230dp"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop"
+            android:background="@drawable/ic_camera" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:paddingTop="10dp">
+
+            <Button
+                android:id="@+id/btnUploadFoto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pilih Foto"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:backgroundTint="@color/biru"/>
+
+            <Button
+                android:id="@+id/btnAmbilFoto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ambil Foto"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:layout_marginLeft="10dp"
+                android:backgroundTint="@color/biru"/>
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_gravity="center"
+            android:indeterminate="true"/>
+
+        <!-- Tombol Kirim -->
+        <Button
+            android:id="@+id/btnSubmitPresensi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Kirim Presensi"
+            android:fontFamily="sans-serif-condensed-medium"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="@color/maroon"
+            android:textColor="@android:color/white" />
+
+        <!-- Status Presensi -->
+        <TextView
+            android:id="@+id/statusPresensi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(Belum ada presensi)"
+            android:fontFamily="monospace"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:padding="8dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center" />
+
+    </LinearLayout>
+</ScrollView>

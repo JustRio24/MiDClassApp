@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">MIDCLASS</string>
+    <string-array name="login_roles">
+        <item>Mahasiswa</item>
+        <item>Dosen</item>
+        <item>Admin</item>
+    </string-array>
+    <string-array name="matkul_array">
+        <item>Praktikum Pemrograman Mobile</item>
+        <item>Praktikum Basis Data</item>
+        <item>Praktikum Pemrograman Berorientasi Objek</item>
+        <item>Analisis Perancangan Sistem Informasi</item>
+        <item>Matematika Diskrit</item>
+        <item>Bahasa Inggris</item>
+        <item>Manajemen Perusahaan</item>
+        <item>Basis data</item>
+        <item>Pemrograman Mobile</item>
+        <item>Pemrograman Berorientasi Objek</item>
+        <item>Ekonomi Dasar</item>
+    </string-array>
+</resources>

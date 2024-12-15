@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_dashboard_mhs"
+    tools:context=".TugasActivity">
+
+    <!-- Header -->
+    <TextView
+        android:id="@+id/tvHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Materi / Tugas"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:background="@color/maroon"
+        android:textColor="@color/putih"
+        android:padding="16dp" />
+
+    <!-- Spinner untuk memilih mata kuliah -->
+    <Spinner
+        android:id="@+id/spinnerMataKuliah"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="16dp"
+        android:layout_below="@id/tvHeader"
+        android:background="@drawable/spinner_background"
+        android:padding="8dp" />
+
+    <!-- RecyclerView untuk daftar materi/tugas -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewMateriTugas"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/spinnerMataKuliah"
+        android:layout_marginTop="8dp"
+        android:padding="8dp" />
+
+</RelativeLayout>

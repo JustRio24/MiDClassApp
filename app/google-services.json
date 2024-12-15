@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "74307852352",
+    "firebase_url": "https://miclass-b9b84-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "miclass-b9b84",
+    "storage_bucket": "miclass-b9b84.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:74307852352:android:f4c986a0298a76d338e7a5",
+        "android_client_info": {
+          "package_name": "com.app.miclass"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCshNqn6BhpImTY2myrCDliIB_MWFUVApw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:74307852352:android:5a2de125362ff64a38e7a5",
+        "android_client_info": {
+          "package_name": "com.app.midclassapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCshNqn6BhpImTY2myrCDliIB_MWFUVApw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

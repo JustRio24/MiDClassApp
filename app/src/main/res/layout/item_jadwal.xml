@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:elevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Dosen -->
+        <TextView
+            android:id="@+id/dosenTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Dosen"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <!-- Mata Kuliah -->
+        <TextView
+            android:id="@+id/matkulTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Matkul"
+            android:textSize="16sp" />
+
+        <!-- Hari -->
+        <TextView
+            android:id="@+id/hariTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Hari"
+            android:textSize="14sp" />
+
+        <!-- Ruang -->
+        <TextView
+            android:id="@+id/ruangTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ruang"
+            android:textSize="14sp" />
+
+        <!-- Waktu -->
+        <TextView
+            android:id="@+id/waktuTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Waktu"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

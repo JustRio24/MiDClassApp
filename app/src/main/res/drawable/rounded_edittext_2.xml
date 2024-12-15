@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/putih" />  <!-- Warna latar belakang -->
+    <corners android:radius="9dp" />        <!-- Sudut melengkung -->
+    <stroke android:color="@color/abu" android:width="1dp" />  <!-- Warna dan ketebalan border -->
+</shape>

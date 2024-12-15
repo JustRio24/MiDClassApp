@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="putih">#f5f5f5</color>
+    <color name="pink">#ff7092</color>
+    <color name="biru">#94a4f5</color>
+    <color name="maroon">#8d1b39</color>
+    <color name="abu">#b1b4b9</color>
+    <color name="biru_muda">#d9ecff</color>
+    <color name="pink_muda2">#ffd1dc</color>
+    <color name="pink_muda1">#ffc1cc</color>
+</resources>

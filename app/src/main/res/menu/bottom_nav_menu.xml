@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_home"
+        android:icon="@drawable/home"
+        android:title="Home" />
+    <item
+        android:id="@+id/menu_calender"
+        android:icon="@drawable/ic_calender"
+        android:title="Notification" />
+    <item
+        android:id="@+id/menu_profile"
+        android:icon="@drawable/profile"
+        android:title="Profile" />
+</menu>

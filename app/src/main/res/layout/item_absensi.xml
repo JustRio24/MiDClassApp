@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:elevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Mata Kuliah -->
+        <TextView
+            android:id="@+id/matkulTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Mata Kuliah"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:paddingBottom="4dp" />
+
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#DADADA"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Tanggal dan Waktu Absensi -->
+        <TextView
+            android:id="@+id/tanggalTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tanggal dan Waktu"
+            android:textSize="14sp"
+            android:paddingBottom="4dp" />
+
+        <!-- Keterangan Absensi -->
+        <TextView
+            android:id="@+id/keteranganTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Keterangan"
+            android:textSize="14sp"
+            android:paddingBottom="8dp" />
+
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#DADADA"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Foto Bukti Absensi -->
+        <ImageView
+            android:id="@+id/fotoImageView"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/ic_placeholder"
+            android:contentDescription="Foto bukti absensi"
+            android:scaleType="centerCrop" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

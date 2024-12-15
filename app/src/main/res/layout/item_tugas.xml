@@ -1,0 +1,16 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:background="@drawable/bg_dashboard_mhs">
+
+    <TextView
+        android:id="@+id/tvTugas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text="contoh"
+        android:textColor="@color/maroon"
+        android:padding="8dp" />
+</LinearLayout>

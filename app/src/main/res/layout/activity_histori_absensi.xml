@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HistoriAbsensiActivity"
+    android:background="@drawable/bg_dashboard_mhs">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Header untuk histori absensi -->
+        <TextView
+            android:id="@+id/headerPresensi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Histori Absensi"
+            android:textSize="25sp"
+            android:padding="10dp"
+            android:fontFamily="monospace"
+            android:textStyle="bold"
+            android:background="@color/biru_muda"
+            android:textAlignment="center"
+            android:textColor="@android:color/black" />
+
+        <!-- RecyclerView untuk menampilkan histori absensi -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewHistori"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+    </LinearLayout>
+</ScrollView>

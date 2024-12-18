@@ -6,7 +6,7 @@
     <item
         android:id="@+id/menu_calender"
         android:icon="@drawable/ic_calender"
-        android:title="Notification" />
+        android:title="Calendar" />
     <item
         android:id="@+id/menu_profile"
         android:icon="@drawable/profile"

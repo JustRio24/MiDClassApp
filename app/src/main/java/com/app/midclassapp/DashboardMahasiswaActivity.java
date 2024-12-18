@@ -191,7 +191,7 @@ public class DashboardMahasiswaActivity extends AppCompatActivity {
 
         ImageView iconProfile = findViewById(R.id.iconProfile);
         iconProfile.setOnClickListener(view -> {
-            Intent intent = new Intent(this, ProfileActivity.class);
+            Intent intent = new Intent(this, ProfileMahasiswaActivity.class);
             startActivity(intent);
         });
     }
@@ -208,7 +208,7 @@ public class DashboardMahasiswaActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, AcademicCalendarActivity.class);
                 startActivity(intent);
             } else if (itemId == R.id.menu_profile) {
-                Intent intent = new Intent(this, ProfileActivity.class);
+                Intent intent = new Intent(this, ProfileMahasiswaActivity.class);
                 startActivity(intent);
             } else {
                 Log.e("DashboardMahasiswaActivity", "Menu tidak dikenal");

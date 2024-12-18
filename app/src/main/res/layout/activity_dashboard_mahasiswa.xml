@@ -153,12 +153,9 @@
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:alignmentMode="alignMargins"
         android:columnCount="3"
-        android:paddingRight="38dp"
-        android:paddingLeft="38dp"
-        android:rowCount="2"
-        android:rowOrderPreserved="false">
+        android:padding="16dp"
+        android:useDefaultMargins="true">
 
         <!-- absen -->
         <LinearLayout
@@ -230,7 +227,7 @@
                 android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Materi/Tugas"
+                android:text="Materi &amp; Tugas"
                 android:textColor="@color/maroon"
                 android:textSize="14sp" />
         </LinearLayout>

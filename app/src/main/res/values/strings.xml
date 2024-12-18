@@ -3,7 +3,6 @@
     <string-array name="login_roles">
         <item>Mahasiswa</item>
         <item>Dosen</item>
-        <item>Admin</item>
     </string-array>
     <string-array name="matkul_array">
         <item>Praktikum Pemrograman Mobile</item>

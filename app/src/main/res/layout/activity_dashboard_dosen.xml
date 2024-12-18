@@ -10,20 +10,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
         android:gravity="center"
-        android:orientation="horizontal"
-        android:paddingTop="16dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp">
+        android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/logoImageView"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_gravity="start"
             android:layout_marginRight="5dp"
-            android:layout_marginBottom="0dp"
             android:contentDescription="Logo MiClass"
             android:src="@drawable/icon_app_midclass" />
 
@@ -43,13 +39,10 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-
-
             <TextView
                 android:id="@+id/dashboardJurusan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily=""
                 android:text="Manajemen Informatika (D4)"
                 android:textAlignment="textEnd"
                 android:textColor="@color/maroon"
@@ -64,7 +57,6 @@
                 android:textAlignment="textEnd"
                 android:textColor="@color/maroon"
                 android:textSize="18sp" />
-
         </LinearLayout>
 
         <ImageView
@@ -74,84 +66,46 @@
             android:layout_gravity="end"
             android:contentDescription="Icon Profil"
             android:src="@drawable/ic_profile_pink" />
-
     </LinearLayout>
 
-    <!-- IP dan SKS Panel -->
+    <!-- Pengingat Jadwal Panel -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="0dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center"
+        android:background="@color/maroon"
+        android:padding="16dp">
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_jadwal"
+            android:layout_marginEnd="16dp" />
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:background="@color/maroon"
-            android:padding="16dp"
-            android:layout_marginStart="8dp">
+            android:orientation="vertical">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/nextScheduleTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginLeft="25dp"
-                android:gravity="center">
+                android:text="Pengingat Jadwal Mengajar Berikutnya"
+                android:textColor="@color/putih"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/sksTempuhText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="SKS Tempuh"
-                    android:textSize="14sp"
-                    android:textColor="@color/putih"
-                    android:gravity="center" />
-
-                <TextView
-                    android:id="@+id/sksTempuhValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="21"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/putih"
-                    android:gravity="center" />
-
-            </LinearLayout>
-
-            <LinearLayout
+            <TextView
+                android:id="@+id/nextScheduleValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginLeft="115dp"
-                android:gravity="center">
-
-                <TextView
-                    android:id="@+id/statusText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Status Keaktifan"
-                    android:textSize="14sp"
-                    android:textColor="@color/putih"
-                    android:gravity="center" />
-
-                <TextView
-                    android:id="@+id/status_Value"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Aktif"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:textColor="#00ff41"
-                    android:gravity="center" />
-
-            </LinearLayout>
+                android:text="Pemrograman Mobile - Rabu, 08:00 WIB"
+                android:textColor="@color/putih"
+                android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -159,21 +113,18 @@
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:alignmentMode="alignMargins"
         android:columnCount="3"
-        android:paddingRight="38dp"
-        android:paddingLeft="38dp"
-        android:rowCount="2"
-        android:rowOrderPreserved="false">
+        android:padding="16dp"
+        android:useDefaultMargins="true">
 
         <!-- absen -->
         <LinearLayout
-            android:id="@+id/menuPresensi"
+            android:id="@+id/menuValidasiPresensi"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="vertical"
-            android:padding="5dp" >
+            android:padding="5dp">
 
             <ImageView
                 android:layout_width="80dp"
@@ -182,68 +133,40 @@
                 android:src="@drawable/ic_absensi" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Presensi"
-                android:textColor="@color/maroon"
-                android:textSize="14sp" />
-        </LinearLayout>
-
-        <!-- jadwal -->
-        <LinearLayout
-            android:id="@+id/menuJadwal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="8dp"
-            android:contextClickable="true">
-
-            <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_margin="8dp"
-                android:src="@drawable/ic_jadwal" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Jadwal"
+                android:text="Validasi Presensi"
                 android:textColor="@color/maroon"
                 android:textSize="14sp" />
         </LinearLayout>
 
         <!-- TUGAS -->
         <LinearLayout
-            android:id="@+id/menuTugas"
+            android:id="@+id/menuUploadTugas"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="vertical"
-            android:layout_marginRight="10dp"
             android:padding="8dp">
 
             <ImageView
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_margin="8dp"
-                android:layout_marginRight="10dp"
                 android:src="@drawable/ic_tugas" />
 
             <TextView
                 android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Materi/Tugas"
+                android:text="Upload Materi &amp; Tugas"
                 android:textColor="@color/maroon"
                 android:textSize="14sp" />
         </LinearLayout>
 
-        <!-- UKT -->
         <LinearLayout
-            android:id="@+id/menuUkt"
+            android:id="@+id/menuSoon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -254,41 +177,16 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_margin="8dp"
-                android:src="@drawable/ic_biaya" />
+                android:src="@drawable/ic_soon" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Simulasi UKT"
+                android:text="Coming Soon"
                 android:textColor="@color/maroon"
                 android:textSize="14sp" />
         </LinearLayout>
-
-        <!-- IPK -->
-        <LinearLayout
-            android:id="@+id/menuIpk"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="8dp">
-
-            <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_margin="8dp"
-                android:src="@drawable/ic_nilai" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Simulasi IPK"
-                android:textColor="@color/maroon"
-                android:textSize="14sp" />
-        </LinearLayout>
-        <!-- Add other menus following the same structure -->
     </GridLayout>
 
     <FrameLayout
@@ -305,5 +203,4 @@
         app:itemIconTint="@color/maroon"
         app:itemTextColor="@color/maroon"
         app:menu="@menu/bottom_nav_menu" />
-
 </LinearLayout>

@@ -46,17 +46,16 @@
                 android:layout_marginBottom="8dp">
 
                 <TextView
-                    android:id="@+id/namaTextView"
+                    android:id="@+id/namaDosenTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Nama Mahasiswa"
+                    android:text="Nama Dosen"
                     android:textAlignment="center"
                     android:textSize="18sp"
                     android:textColor="#000000"
                     android:textStyle="bold"
                     android:layout_weight="1"/>
 
-                <!-- Jurusan Pengguna dengan Tombol Edit -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -90,17 +89,17 @@
                     android:layout_marginBottom="8dp" />
 
                 <TextView
-                    android:id="@+id/nimJudul"
+                    android:id="@+id/nipJudul"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Nomor Induk Mahasiswa:"
+                    android:text="NIP:"
                     android:textSize="10sp"
                     android:layout_marginLeft="13dp"
                     android:textColor="#757575"
                     android:layout_weight="1"/>
 
                 <TextView
-                    android:id="@+id/nimTextView"
+                    android:id="@+id/nipTextView"
                     android:layout_width="match_parent"
                     android:layout_height="27dp"
                     android:layout_gravity="center"
@@ -115,23 +114,23 @@
                     android:background="@drawable/rounded_edittext_2"/>
 
                 <TextView
-                    android:id="@+id/kelasJudul"
+                    android:id="@+id/matkulJudul"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Kelas :"
+                    android:text="Pengampu :"
                     android:textSize="10sp"
                     android:layout_marginLeft="13dp"
                     android:textColor="#757575"
                     android:layout_weight="1"/>
 
                 <TextView
-                    android:id="@+id/kelasTextView"
+                    android:id="@+id/matkulPengampuTextView"
                     android:layout_width="match_parent"
                     android:layout_height="27dp"
                     android:layout_gravity="center"
                     android:gravity="center_vertical"
                     android:paddingStart="9dp"
-                    android:text="3 MID"
+                    android:text="Ekonomi Dasar"
                     android:layout_marginBottom="6dp"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
@@ -232,7 +231,7 @@
                         android:layout_height="26dp"
                         android:src="@drawable/ic_edit"
                         android:layout_marginLeft="6dp"
-                        android:contentDescription="Edit No Telp"
+                        android:contentDescription="Edit Jurusan"
                         android:clickable="true"
                         android:focusable="true"/>
                 </LinearLayout>
@@ -273,7 +272,7 @@
                         android:layout_height="26dp"
                         android:src="@drawable/ic_edit"
                         android:layout_marginLeft="6dp"
-                        android:contentDescription="Edit Alamat"
+                        android:contentDescription="Edit Jurusan"
                         android:clickable="true"
                         android:focusable="true"/>
 
@@ -281,14 +280,14 @@
 
             </LinearLayout>
 
-            <!-- Input untuk Jurusan Baru -->
+            <!-- Input Baru -->
             <EditText
                 android:id="@+id/emailEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="E-mail Baru"
-                android:inputType="textEmailAddress"
                 android:textSize="16sp"
+                android:inputType="textEmailAddress"
                 android:padding="12dp"
                 android:background="@drawable/rounded_edittext_2"
                 android:layout_marginBottom="16dp"
@@ -299,8 +298,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Nomor Telp Baru"
-                android:inputType="number"
                 android:textSize="16sp"
+                android:inputType="number"
                 android:padding="12dp"
                 android:background="@drawable/rounded_edittext_2"
                 android:layout_marginBottom="16dp"

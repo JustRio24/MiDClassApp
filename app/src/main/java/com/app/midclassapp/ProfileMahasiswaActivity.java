@@ -18,7 +18,6 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -29,7 +28,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileMahasiswaActivity extends AppCompatActivity {
 
     FirebaseFirestore db;
     DocumentReference docRef;
@@ -53,7 +52,7 @@ public class ProfileActivity extends AppCompatActivity {
                 .getString("nimOrNip", null);
 
         if (nimOrNip == null || nimOrNip.isEmpty()) {
-            Toast.makeText(ProfileActivity.this, "User tidak terdaftar", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ProfileMahasiswaActivity.this, "User tidak terdaftar", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
@@ -174,13 +173,13 @@ public class ProfileActivity extends AppCompatActivity {
         updates.put("alamat", newAlamat);
 
         docRef.update(updates).addOnSuccessListener(aVoid -> {
-            Toast.makeText(ProfileActivity.this, "Data berhasil diperbarui", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ProfileMahasiswaActivity.this, "Data berhasil diperbarui", Toast.LENGTH_SHORT).show();
             emailTextView.setText(newEmail);
             noTelpTextView.setText(newNoTelp);
             alamatTextView.setText(newAlamat);
             hideEditFields();
         }).addOnFailureListener(e -> {
-            Toast.makeText(ProfileActivity.this, "Gagal memperbarui data", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ProfileMahasiswaActivity.this, "Gagal memperbarui data", Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -235,9 +234,9 @@ public class ProfileActivity extends AppCompatActivity {
         updates.put("profile_picture", encodedImage);
 
         docRef.update(updates).addOnSuccessListener(aVoid -> {
-            Toast.makeText(ProfileActivity.this, "Foto profil berhasil diperbarui", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ProfileMahasiswaActivity.this, "Foto profil berhasil diperbarui", Toast.LENGTH_SHORT).show();
         }).addOnFailureListener(e -> {
-            Toast.makeText(ProfileActivity.this, "Gagal memperbarui foto profil", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ProfileMahasiswaActivity.this, "Gagal memperbarui foto profil", Toast.LENGTH_SHORT).show();
         });
     }
 }

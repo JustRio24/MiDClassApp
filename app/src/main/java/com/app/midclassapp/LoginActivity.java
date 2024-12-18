@@ -50,6 +50,7 @@ public class LoginActivity extends AppCompatActivity {
         db.collection("users")
                 .whereEqualTo("nimOrNip", nimOrNip)
                 .whereEqualTo("password", password)
+                .whereEqualTo("role", role)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     if (!queryDocumentSnapshots.isEmpty()) {
@@ -66,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
                         navigateToDashboard(role);
                     } else {
                         // Login gagal
-                        Toast.makeText(this, "NIM/NIP atau Password salah", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "NIM/NIP atau Password salah atau Role tidak tepat!", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(e -> {
@@ -85,9 +86,6 @@ public class LoginActivity extends AppCompatActivity {
                 break;
             case "Dosen":
                 intent = new Intent(LoginActivity.this, DashboardDosenActivity.class);
-                break;
-            case "Admin":
-                intent = new Intent(LoginActivity.this, DashboardAdminActivity.class);
                 break;
             default:
                 Toast.makeText(this, "Role tidak valid", Toast.LENGTH_SHORT).show();

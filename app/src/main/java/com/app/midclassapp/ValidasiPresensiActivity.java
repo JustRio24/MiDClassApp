@@ -25,7 +25,7 @@ import java.util.Map;
 public class ValidasiPresensiActivity extends AppCompatActivity {
 
     private RecyclerView historyRecyclerView;
-    private HistoryPresensiAdapter historyAdapter;
+    private ValidasiPresensiAdapter historyAdapter;
     private ArrayList<Absensi> historyAbsensi;
     private Map<String, Absensi> selectedAbsensiMap;
 
@@ -53,7 +53,7 @@ public class ValidasiPresensiActivity extends AppCompatActivity {
         // Setup RecyclerView
         historyRecyclerView = findViewById(R.id.historyRecyclerView);
         historyRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        historyAdapter = new HistoryPresensiAdapter(this, historyAbsensi, selectedAbsensiMap);
+        historyAdapter = new ValidasiPresensiAdapter(this, historyAbsensi, selectedAbsensiMap);
         historyRecyclerView.setAdapter(historyAdapter);
 
         // Tombol Validasi

@@ -2,8 +2,6 @@ package com.app.midclassapp;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +15,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class HistoryPresensiAdapter extends RecyclerView.Adapter<HistoryPresensiAdapter.ViewHolder> {
+public class ValidasiPresensiAdapter extends RecyclerView.Adapter<ValidasiPresensiAdapter.ViewHolder> {
 
     private Context context;
     private ArrayList<Absensi> historyAbsensi;
     private Map<String, Absensi> selectedAbsensiMap;
 
-    public HistoryPresensiAdapter(Context context, ArrayList<Absensi> historyAbsensi, Map<String, Absensi> selectedAbsensiMap) {
+    public ValidasiPresensiAdapter(Context context, ArrayList<Absensi> historyAbsensi, Map<String, Absensi> selectedAbsensiMap) {
         this.context = context;
         this.historyAbsensi = historyAbsensi;
         this.selectedAbsensiMap = selectedAbsensiMap;
@@ -32,7 +30,7 @@ public class HistoryPresensiAdapter extends RecyclerView.Adapter<HistoryPresensi
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_history_presensi, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_validasi_presensi, parent, false);
         return new ViewHolder(view);
     }
 

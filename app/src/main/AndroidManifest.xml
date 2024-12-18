@@ -64,16 +64,13 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- Dashboard Mahasiswa -->
+        </activity>
         <activity
             android:name=".DashboardMahasiswaActivity"
-            android:exported="true" /> <!-- Dashboard Dosen -->
+            android:exported="true" /> <!-- Dashboard Mahasiswa -->
         <activity
             android:name=".DashboardDosenActivity"
-            android:exported="true" /> <!-- Dashboard Admin -->
-        <activity
-            android:name=".DashboardAdminActivity"
-            android:exported="true" />
+            android:exported="true" /> <!-- Dashboard Dosen -->
 
         <provider
             android:name="androidx.core.content.FileProvider"

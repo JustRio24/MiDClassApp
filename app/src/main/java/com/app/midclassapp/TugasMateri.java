@@ -1,5 +1,6 @@
 package com.app.midclassapp;
 
+// model data yang menyimpan informasi Tugas & Materi
 public class TugasMateri {
     private String title;
     private String description;

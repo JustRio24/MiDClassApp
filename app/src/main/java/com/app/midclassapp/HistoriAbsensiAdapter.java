@@ -21,34 +21,35 @@ import java.util.Locale;
 
 public class HistoriAbsensiAdapter extends RecyclerView.Adapter<HistoriAbsensiAdapter.AbsensiViewHolder> {
 
-    private List<Absensi> historiAbsensi;
+    private List<Absensi> historiAbsensi; // List yang menyimpan data absensi
 
     public HistoriAbsensiAdapter(List<Absensi> historiAbsensi) {
-        this.historiAbsensi = historiAbsensi;
+        this.historiAbsensi = historiAbsensi; // Konstruktor untuk inisialisasi list absensi
     }
 
     @NonNull
     @Override
     public AbsensiViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Inflate layout untuk setiap item
+        // Inflate layout untuk setiap item pada RecyclerView
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_absensi, parent, false);
-        return new AbsensiViewHolder(view);
+        return new AbsensiViewHolder(view); // Mengembalikan ViewHolder yang baru
     }
 
     @Override
     public void onBindViewHolder(@NonNull AbsensiViewHolder holder, int position) {
+        // Ambil data absensi berdasarkan posisi
         Absensi absensi = historiAbsensi.get(position);
 
-        // Set data ke komponen UI
+        // Set data absensi ke komponen UI
         holder.matkulTextView.setText(absensi.getMatkul());
-        holder.tanggalTextView.setText(formatTimestamp(absensi.getTimestamp())); // Format timestamp
+        holder.tanggalTextView.setText(formatTimestamp(absensi.getTimestamp())); // Format timestamp ke format yang diinginkan
         holder.keteranganTextView.setText(absensi.getKeterangan());
 
-        // Jika ada foto, tampilkan gambar
+        // Jika ada foto, tampilkan foto dari Base64
         if (absensi.getFotoBase64() != null && !absensi.getFotoBase64().isEmpty()) {
-            byte[] decodedString = Base64.decode(absensi.getFotoBase64(), Base64.DEFAULT);
-            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            holder.fotoImageView.setImageBitmap(decodedByte);
+            byte[] decodedString = Base64.decode(absensi.getFotoBase64(), Base64.DEFAULT); // Dekode foto dari base64
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length); // Mengubah byte array menjadi gambar
+            holder.fotoImageView.setImageBitmap(decodedByte); // Set gambar ke ImageView
         } else {
             holder.fotoImageView.setImageResource(R.drawable.ic_placeholder); // Gambar placeholder jika tidak ada foto
         }
@@ -56,32 +57,32 @@ public class HistoriAbsensiAdapter extends RecyclerView.Adapter<HistoriAbsensiAd
 
     @Override
     public int getItemCount() {
-        return historiAbsensi.size();
+        return historiAbsensi.size(); // Mengembalikan jumlah item di list
     }
 
-    // Helper method untuk memformat timestamp
+    // Helper method untuk memformat timestamp menjadi string dengan format yang diinginkan
     private String formatTimestamp(Timestamp timestamp) {
         if (timestamp != null) {
-            Date date = timestamp.toDate(); // Konversi Timestamp menjadi Date
-            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
-            return formatter.format(date);
+            Date date = timestamp.toDate(); // Konversi Timestamp menjadi objek Date
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault()); // Format tanggal
+            return formatter.format(date); // Kembalikan hasil format tanggal
         } else {
-            return "Tanggal tidak tersedia"; // Jika timestamp null
+            return "Tanggal tidak tersedia"; // Jika timestamp null, kembalikan pesan default
         }
     }
 
     // ViewHolder untuk setiap item
     public static class AbsensiViewHolder extends RecyclerView.ViewHolder {
 
-        TextView matkulTextView, tanggalTextView, keteranganTextView;
-        ImageView fotoImageView;
+        TextView matkulTextView, tanggalTextView, keteranganTextView; // TextView untuk menampilkan data absensi
+        ImageView fotoImageView; // ImageView untuk menampilkan foto
 
         public AbsensiViewHolder(View itemView) {
             super(itemView);
-            matkulTextView = itemView.findViewById(R.id.matkulTextView);
-            tanggalTextView = itemView.findViewById(R.id.tanggalTextView);
-            keteranganTextView = itemView.findViewById(R.id.keteranganTextView);
-            fotoImageView = itemView.findViewById(R.id.fotoImageView);
+            matkulTextView = itemView.findViewById(R.id.matkulTextView); // Menghubungkan matkulTextView dengan layout
+            tanggalTextView = itemView.findViewById(R.id.tanggalTextView); // Menghubungkan tanggalTextView dengan layout
+            keteranganTextView = itemView.findViewById(R.id.keteranganTextView); // Menghubungkan keteranganTextView dengan layout
+            fotoImageView = itemView.findViewById(R.id.fotoImageView); // Menghubungkan fotoImageView dengan layout
         }
     }
 }

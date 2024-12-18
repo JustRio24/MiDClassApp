@@ -14,6 +14,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+// activity yang mengatur tampilan dan menampilkan data jadwal menggunakan UI,
 public class JadwalActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
@@ -36,6 +37,7 @@ public class JadwalActivity extends AppCompatActivity {
         loadJadwal();
     }
 
+    // method untuk mengambil data Jadwal Matkul yg ada di database
     private void loadJadwal() {
         db.collection("jadwal")
                 .get()

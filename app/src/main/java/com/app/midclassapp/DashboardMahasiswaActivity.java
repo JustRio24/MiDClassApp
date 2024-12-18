@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Base64;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -17,6 +16,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+// Activity Untuk Dashboard Mahasiswa
 public class DashboardMahasiswaActivity extends AppCompatActivity {
 
     private TextView dashboardUserName, dashboardJurusan, dashboardKampus, sksTempuhValue, statusValue;
@@ -28,36 +28,40 @@ public class DashboardMahasiswaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard_mahasiswa);
-        Log.d("DashboardMahasiswaActivity", "Activity started");
 
-        // Inisialisasi Firestore
+        // Inisialisasi instance Firestore untuk mengelola database
         db = FirebaseFirestore.getInstance();
 
+        // Inisialisasi semua elemen UI yang diperlukan
         initializeViews();
-        loadUserData(); // Mengambil data pengguna dari Firestore
 
+        // Memuat data pengguna dari Firestore dan menampilkan ke dashboard
+        loadUserData();
+
+        // Menyiapkan menu klik pada dashboard
         setupMenuActions();
-        setupBottomNavigation();
 
+        // Menyiapkan Bottom Navigation untuk fitur tambahan
+        setupBottomNavigation();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        // Ambil nimOrNip dari SharedPreferences
+        // Ambil nimOrNip dari SharedPreferences untuk mengecek apakah pengguna sudah login
         String nimOrNip = getSharedPreferences("MiDClassPrefs", MODE_PRIVATE)
                 .getString("nimOrNip", null);
 
         if (nimOrNip == null) {
-            // Jika nimOrNip tidak ditemukan, alihkan ke login
+            // Jika nimOrNip tidak ditemukan, pengguna akan dialihkan ke halaman login
             Toast.makeText(this, "Anda belum login", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(this, LoginActivity.class));
-            finish();  // Pastikan Dashboard tidak lagi ditampilkan
+            finish();
             return;
         }
 
-        // Query Firestore menggunakan nimOrNip yang diambil dari SharedPreferences
+        // Query Firestore untuk mengambil data pengguna berdasarkan nimOrNip
         db.collection("users")
                 .whereEqualTo("nimOrNip", nimOrNip)
                 .get()
@@ -67,117 +71,115 @@ public class DashboardMahasiswaActivity extends AppCompatActivity {
 
                         // Ambil data pengguna dari Firestore
                         String username = document.getString("username");
-                        String kelas = document.getString("kelas");
                         String jurusan = document.getString("jurusan");
                         String kampus = document.getString("kampus");
                         String sks = document.getString("sks");
                         String status = document.getString("status");
                         String base64Image = document.getString("profile_picture");
 
+                        // Jika ada gambar profil, dekode dari base64 dan tampilkan
                         if (base64Image != null && !base64Image.isEmpty()) {
                             try {
                                 byte[] decodedString = Base64.decode(base64Image, Base64.DEFAULT);
                                 BitmapFactory.Options options = new BitmapFactory.Options();
-                                options.inSampleSize = 4;
+                                options.inSampleSize = 4; // Mengurangi ukuran gambar
                                 Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length, options);
                                 iconProfile.setImageBitmap(decodedByte);
                             } catch (Exception e) {
-                                Log.e("ProfileActivity", "Error decoding Base64 image", e);
+                                e.printStackTrace();
                             }
                         }
 
-                        // Tampilkan data ke UI
+                        // Menampilkan data pengguna ke elemen UI
                         dashboardUserName.setText(username != null ? username : "Nama tidak ditemukan");
                         dashboardJurusan.setText(jurusan != null ? jurusan : "Jurusan tidak ditemukan");
                         dashboardKampus.setText(kampus != null ? kampus : "Kampus tidak ditemukan");
                         sksTempuhValue.setText(sks != null ? sks : "0");
                         statusValue.setText(status != null ? status : "Tidak diketahui");
-
-                        Log.d("DashboardMahasiswaActivity", "Data berhasil dimuat");
                     } else {
-                        Log.e("DashboardMahasiswaActivity", "User not found");
                         Toast.makeText(this, "Data pengguna tidak ditemukan", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(e -> {
-                    Log.e("DashboardMahasiswaActivity", "Error: " + e.getMessage());
                     Toast.makeText(this, "Gagal memuat data pengguna", Toast.LENGTH_SHORT).show();
                 });
     }
 
-
+    /*
+     * Inisialisasi elemen UI dari layout activity_dashboard_mahasiswa.
+     * Method ini digunakan untuk menghubungkan elemen UI di XML ke variabel dalam kode Java.
+     */
     private void initializeViews() {
-        // Header
         dashboardUserName = findViewById(R.id.dashboardUserName);
         dashboardJurusan = findViewById(R.id.dashboardJurusan);
         dashboardKampus = findViewById(R.id.dashboardKampus);
         logoImageView = findViewById(R.id.logoImageView);
         iconProfile = findViewById(R.id.iconProfile);
 
-        // Data tambahan
         sksTempuhValue = findViewById(R.id.sksTempuhValue);
         statusValue = findViewById(R.id.status_Value);
     }
 
+    /*
+     * Memuat data pengguna dari Firestore berdasarkan nimOrNip yang disimpan di SharedPreferences.
+     * Method ini akan menampilkan data pengguna pada elemen UI dashboard.
+     */
     private void loadUserData() {
-        // Simulasikan NIM/NIP pengguna
         String nimOrNip = getSharedPreferences("MiDClassPrefs", MODE_PRIVATE)
-                .getString("nimOrNip", null); // shared preferences
+                .getString("nimOrNip", null);
 
-        // Query Firestore berdasarkan NIM/NIP
+        // Query Firestore untuk mendapatkan data pengguna
         db.collection("users").whereEqualTo("nimOrNip", nimOrNip)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     if (!queryDocumentSnapshots.isEmpty()) {
-                        // Mengambil dokumen pertama
                         DocumentSnapshot document = queryDocumentSnapshots.getDocuments().get(0);
 
+                        // Ambil data dari dokumen Firestore
                         String username = document.getString("username");
                         String jurusan = document.getString("jurusan");
                         String kampus = document.getString("kampus");
                         String sks = document.getString("sks");
                         String status = document.getString("status");
 
-                        // Menampilkan data ke UI
+                        // Tampilkan data pengguna di elemen UI
                         dashboardUserName.setText(username != null ? username : "Nama tidak ditemukan");
                         dashboardJurusan.setText(jurusan != null ? jurusan : "Jurusan tidak ditemukan");
                         dashboardKampus.setText(kampus != null ? kampus : "Kampus tidak ditemukan");
                         sksTempuhValue.setText(sks != null ? sks : "0");
                         statusValue.setText(status != null ? status : "Tidak diketahui");
                     } else {
-                        Log.e("DashboardMahasiswaActivity", "User not found");
                         Toast.makeText(this, "Data pengguna tidak ditemukan", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(e -> {
-                    Log.e("DashboardMahasiswaActivity", "Error: " + e.getMessage());
                     Toast.makeText(this, "Gagal memuat data pengguna", Toast.LENGTH_SHORT).show();
                 });
     }
 
+    /*
+     * Menyiapkan tindakan pada menu di dashboard, seperti Presensi, Jadwal, Tugas, dan Riwayat.
+     * Setiap menu akan diarahkan ke activity yang sesuai.
+     */
     private void setupMenuActions() {
-        // Menu Presensi
         LinearLayout menuPresensi = findViewById(R.id.menuPresensi);
         menuPresensi.setOnClickListener(view -> {
             Intent intent = new Intent(this, PresensiActivity.class);
             startActivity(intent);
         });
 
-        // Menu Jadwal
         LinearLayout menuJadwal = findViewById(R.id.menuJadwal);
         menuJadwal.setOnClickListener(view -> {
             Intent intent = new Intent(this, JadwalActivity.class);
             startActivity(intent);
         });
 
-        // Menu Tugas
         LinearLayout menuNilai = findViewById(R.id.menuTugas);
         menuNilai.setOnClickListener(view -> {
             Intent intent = new Intent(this, TugasActivity.class);
             startActivity(intent);
         });
 
-        // Menu Riwayat
         LinearLayout menuRiwayat = findViewById(R.id.menuRiwayat);
         menuRiwayat.setOnClickListener(view -> {
             Intent intent = new Intent(this, HistoriAbsensiActivity.class);
@@ -189,13 +191,14 @@ public class DashboardMahasiswaActivity extends AppCompatActivity {
             Toast.makeText(this, "Fitur Baru akan Segera hadir !!!", Toast.LENGTH_SHORT).show();
         });
 
-        ImageView iconProfile = findViewById(R.id.iconProfile);
         iconProfile.setOnClickListener(view -> {
             Intent intent = new Intent(this, ProfileMahasiswaActivity.class);
             startActivity(intent);
         });
     }
 
+
+    // Menyiapkan navigasi bawah untuk berpindah antar fitur, seperti Home, Kalender Akademik, dan Profil.
     private void setupBottomNavigation() {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
@@ -211,7 +214,7 @@ public class DashboardMahasiswaActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, ProfileMahasiswaActivity.class);
                 startActivity(intent);
             } else {
-                Log.e("DashboardMahasiswaActivity", "Menu tidak dikenal");
+                Toast.makeText(this, "Menu tidak dikenal", Toast.LENGTH_SHORT).show();
             }
 
             return true;

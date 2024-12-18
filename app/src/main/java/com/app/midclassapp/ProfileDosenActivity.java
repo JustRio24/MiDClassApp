@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,12 +32,13 @@ public class ProfileDosenActivity extends AppCompatActivity {
     FirebaseFirestore db;
     DocumentReference docRef;
 
+    // Deklarasi view untuk menampilkan data dosen
     TextView jurusanTextView, kampusTextView, nipTextView, namaDosenTextView, matkulPengampuTextView, emailTextView, noTelpTextView, alamatTextView;
     ImageView profileImageView, editEmailIcon, editNoTelpIcon, editAlamatIcon;
     EditText emailEditText, noTelpEditText, alamatEditText;
     Button editButton;
 
-    private static final int PICK_IMAGE_REQUEST = 1;
+    private static final int PICK_IMAGE_REQUEST = 1; // Kode untuk memilih gambar
     private Uri imageUri;
 
     @Override
@@ -46,18 +46,18 @@ public class ProfileDosenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_dosen);
 
-        db = FirebaseFirestore.getInstance();
+        db = FirebaseFirestore.getInstance(); // Inisialisasi Firestore
 
         String nimOrNip = getSharedPreferences("MiDClassPrefs", MODE_PRIVATE)
                 .getString("nimOrNip", null);
 
         if (nimOrNip == null || nimOrNip.isEmpty()) {
             Toast.makeText(ProfileDosenActivity.this, "User tidak terdaftar", Toast.LENGTH_SHORT).show();
-            finish();
+            finish(); // Jika nimOrNip tidak ditemukan, tutup activity
             return;
         }
 
-        docRef = db.collection("users").document(nimOrNip);
+        docRef = db.collection("users").document(nimOrNip); // Mendapatkan referensi dokumen Firestore
 
         // Inisialisasi tampilan (views)
         nipTextView = findViewById(R.id.nipTextView);
@@ -75,6 +75,7 @@ public class ProfileDosenActivity extends AppCompatActivity {
         alamatEditText = findViewById(R.id.alamatEditText);
         editButton = findViewById(R.id.editButton);
 
+        // Sembunyikan EditText dan tombol edit
         emailEditText.setVisibility(View.GONE);
         noTelpEditText.setVisibility(View.GONE);
         alamatEditText.setVisibility(View.GONE);
@@ -83,11 +84,12 @@ public class ProfileDosenActivity extends AppCompatActivity {
         // Mengambil data dosen
         getUserData();
 
-        // Menambahkan click listeners
+        // Menambahkan click listeners untuk ikon edit
         editEmailIcon.setOnClickListener(v -> showEditText(emailEditText, emailTextView.getText().toString(), emailEditText));
         editNoTelpIcon.setOnClickListener(v -> showEditText(noTelpEditText, noTelpTextView.getText().toString(), noTelpEditText));
         editAlamatIcon.setOnClickListener(v -> showEditText(alamatEditText, alamatTextView.getText().toString(), alamatEditText));
 
+        // Tombol untuk menyimpan perubahan data
         editButton.setOnClickListener(v -> updateUserData());
 
         // Menambahkan listener untuk mengganti foto profil
@@ -95,6 +97,7 @@ public class ProfileDosenActivity extends AppCompatActivity {
     }
 
     private void getUserData() {
+        // Mengambil data dosen dari Firestore
         docRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
@@ -116,15 +119,16 @@ public class ProfileDosenActivity extends AppCompatActivity {
                     nipTextView.setText(nimOrNip);
                     namaDosenTextView.setText(username);
 
+                    // Jika gambar profil ada, tampilkan gambar
                     if (base64Image != null && !base64Image.isEmpty()) {
                         try {
                             byte[] decodedString = Base64.decode(base64Image, Base64.DEFAULT);
                             BitmapFactory.Options options = new BitmapFactory.Options();
-                            options.inSampleSize = 4;
+                            options.inSampleSize = 4; // Ukuran sampel untuk gambar yang lebih kecil
                             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length, options);
                             profileImageView.setImageBitmap(decodedByte);
                         } catch (Exception e) {
-                            Log.e("ProfileDosenActivity", "Error decoding Base64 image", e);
+                            e.printStackTrace(); // Tangani error jika decoding gagal
                         }
                     }
 
@@ -135,19 +139,24 @@ public class ProfileDosenActivity extends AppCompatActivity {
                     alamatTextView.setText(alamat != null ? alamat : "Alamat tidak ditemukan");
 
                 } else {
-                    Log.d("Firestore", "Dokumen tidak ditemukan!");
+                    // Jika dokumen tidak ditemukan, tutup activity
+                    Toast.makeText(ProfileDosenActivity.this, "Data dosen tidak ditemukan", Toast.LENGTH_SHORT).show();
+                    finish();
                 }
             } else {
-                Log.d("Firestore", "Gagal dengan: ", task.getException());
+                // Tangani error jika gagal mengambil data
+                Toast.makeText(ProfileDosenActivity.this, "Gagal mengambil data", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void showEditText(EditText editText, String currentValue, EditText targetEditText) {
+        // Menampilkan EditText untuk mengubah data
         targetEditText.setVisibility(View.VISIBLE);
         targetEditText.setText(currentValue);
         editButton.setVisibility(View.VISIBLE);
 
+        // Menyembunyikan TextView yang sedang diedit
         if (editText == emailEditText) {
             findViewById(R.id.emailTextView).setVisibility(View.GONE);
         } else if (editText == noTelpEditText) {
@@ -158,6 +167,7 @@ public class ProfileDosenActivity extends AppCompatActivity {
     }
 
     private void updateUserData() {
+        // Mengambil nilai baru dari EditText atau TextView
         String newEmail = emailEditText.getVisibility() == View.VISIBLE
                 ? emailEditText.getText().toString()
                 : emailTextView.getText().toString();
@@ -170,76 +180,69 @@ public class ProfileDosenActivity extends AppCompatActivity {
                 ? alamatEditText.getText().toString()
                 : alamatTextView.getText().toString();
 
+        // Menyusun data pembaruan untuk Firestore
         Map<String, Object> updates = new HashMap<>();
         updates.put("email", newEmail);
         updates.put("noTelp", newNoTelp);
         updates.put("alamat", newAlamat);
 
+        // Mengupdate data dosen di Firestore
         docRef.update(updates).addOnSuccessListener(aVoid -> {
             Toast.makeText(ProfileDosenActivity.this, "Data berhasil diperbarui", Toast.LENGTH_SHORT).show();
             emailTextView.setText(newEmail);
             noTelpTextView.setText(newNoTelp);
             alamatTextView.setText(newAlamat);
-            hideEditFields();
+            hideEditFields(); // Menyembunyikan EditText dan tombol edit setelah berhasil
         }).addOnFailureListener(e -> {
             Toast.makeText(ProfileDosenActivity.this, "Gagal memperbarui data", Toast.LENGTH_SHORT).show();
         });
     }
 
     private void hideEditFields() {
+        // Menyembunyikan EditText dan tombol edit
         emailEditText.setVisibility(View.GONE);
         noTelpEditText.setVisibility(View.GONE);
         alamatEditText.setVisibility(View.GONE);
         editButton.setVisibility(View.GONE);
+
+        // Menampilkan kembali TextView
         findViewById(R.id.emailTextView).setVisibility(View.VISIBLE);
         findViewById(R.id.noTelpTextView).setVisibility(View.VISIBLE);
         findViewById(R.id.alamatTextView).setVisibility(View.VISIBLE);
     }
 
     private void openImageChooser() {
+        // Membuka galeri untuk memilih gambar
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        intent.setType("image/*");
         startActivityForResult(intent, PICK_IMAGE_REQUEST);
     }
 
-    // Method untuk menangani hasil pemilihan gambar
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            imageUri = data.getData();  // Menyimpan URI gambar yang dipilih
-
-            // Menampilkan gambar yang dipilih di ImageView
+            imageUri = data.getData();
             try {
-                InputStream imageStream = getContentResolver().openInputStream(imageUri);
-                Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                profileImageView.setImageBitmap(selectedImage);
+                // Mengubah gambar yang dipilih menjadi Bitmap
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
+                profileImageView.setImageBitmap(bitmap);
 
-                // Mengonversi gambar ke format Base64 dan mengupdate Firestore
-                uploadImageToFirestore(selectedImage);
+                // Mengubah gambar Bitmap menjadi Base64
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+                byte[] byteArray = byteArrayOutputStream.toByteArray();
+                String encodedImage = Base64.encodeToString(byteArray, Base64.DEFAULT);
+
+                // Menyimpan gambar profil ke Firestore
+                docRef.update("profile_picture", encodedImage).addOnSuccessListener(aVoid -> {
+                    Toast.makeText(ProfileDosenActivity.this, "Gambar profil berhasil diperbarui", Toast.LENGTH_SHORT).show();
+                }).addOnFailureListener(e -> {
+                    Toast.makeText(ProfileDosenActivity.this, "Gagal memperbarui gambar profil", Toast.LENGTH_SHORT).show();
+                });
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-    }
-
-    // Method untuk mengupload gambar ke Firestore setelah diubah
-    private void uploadImageToFirestore(Bitmap selectedImage) {
-        // Mengonversi gambar Bitmap ke Base64
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        selectedImage.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-        byte[] byteArray = byteArrayOutputStream.toByteArray();
-        String encodedImage = Base64.encodeToString(byteArray, Base64.DEFAULT);
-
-        // Update gambar profil di Firestore
-        Map<String, Object> updates = new HashMap<>();
-        updates.put("profile_picture", encodedImage);
-
-        docRef.update(updates).addOnSuccessListener(aVoid -> {
-            Toast.makeText(ProfileDosenActivity.this, "Foto profil berhasil diperbarui", Toast.LENGTH_SHORT).show();
-        }).addOnFailureListener(e -> {
-            Toast.makeText(ProfileDosenActivity.this, "Gagal memperbarui foto profil", Toast.LENGTH_SHORT).show();
-        });
     }
 }

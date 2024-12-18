@@ -1,5 +1,6 @@
 package com.app.midclassapp;
 
+// model data yang menyimpan informasi jadwal, seperti mata kuliah, waktu, hari, dan ruang kelas.
 public class Jadwal {
     private String dosen;
     private String matkul;

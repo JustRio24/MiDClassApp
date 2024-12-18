@@ -51,6 +51,8 @@ public class UploadTugasActivity extends AppCompatActivity {
         btnUploadTask.setOnClickListener(v -> uploadTask());
     }
 
+
+    //  Mengambil data mata kuliah dosen dari Firestore berdasarkan NIP/NIM.
     private void getMatkulDosen() {
         db.collection("users").document(nimOrNip)
                 .get()
@@ -73,27 +75,33 @@ public class UploadTugasActivity extends AppCompatActivity {
                 });
     }
 
+
+     // Mengupload tugas/materi yang dimasukkan oleh dosen ke Firestore.
     private void uploadTask() {
         // Validasi input
         String title = edtTitle.getText().toString().trim();
         String description = edtDescription.getText().toString().trim();
         String deadline = edtDeadline.getText().toString().trim();
 
+        // Validasi judul
         if (TextUtils.isEmpty(title)) {
             Toast.makeText(this, "Judul tidak boleh kosong!", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        // Validasi deskripsi
         if (TextUtils.isEmpty(description)) {
             Toast.makeText(this, "Deskripsi tidak boleh kosong!", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        // Validasi deadline
         if (TextUtils.isEmpty(deadline)) {
             Toast.makeText(this, "Deadline tidak boleh kosong!", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        // Validasi mata kuliah
         if (TextUtils.isEmpty(matkulDosen)) {
             Toast.makeText(this, "Mata kuliah tidak ditemukan!", Toast.LENGTH_SHORT).show();
             return;
@@ -107,6 +115,7 @@ public class UploadTugasActivity extends AppCompatActivity {
         taskData.put("matkul", matkulDosen);
         taskData.put("uploadedBy", nimOrNip);
 
+        // Menambahkan tugas/materi ke Firestore
         db.collection("tugas_materi")
                 .add(taskData)
                 .addOnSuccessListener(documentReference -> {

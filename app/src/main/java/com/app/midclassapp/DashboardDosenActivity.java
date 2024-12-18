@@ -3,7 +3,6 @@ package com.app.midclassapp;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -48,11 +47,14 @@ public class DashboardDosenActivity extends AppCompatActivity {
         // Ambil data dosen berdasarkan nimOrNip
         ambilDataDosen(nimOrNip);
 
+        // Setup menu actions (untuk navigasi menu)
         setupMenuActions();
+
+        // Setup bottom navigation bar
         setupBottomNavigation();
     }
 
-
+    // Setup untuk setiap menu yang ada pada dashboard dosen
     private void setupMenuActions() {
         // Menu Presensi
         LinearLayout menuPresensi = findViewById(R.id.menuValidasiPresensi);
@@ -68,19 +70,20 @@ public class DashboardDosenActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        // Menu Fitur Segera Hadir
         LinearLayout menuSoon = findViewById(R.id.menuSoon);
         menuSoon.setOnClickListener(view -> {
             Toast.makeText(this, "Fitur Baru akan Segera hadir !!!", Toast.LENGTH_SHORT).show();
         });
 
-        ImageView iconProfile = findViewById(R.id.iconProfile);
+        // Menu Profile Dosen
         iconProfile.setOnClickListener(view -> {
             Intent intent = new Intent(this, ProfileDosenActivity.class);
             startActivity(intent);
         });
     }
 
-    // Ambil data dosen dari Firestore berdasarkan nimOrNip
+    // Mengambil data dosen dari Firestore berdasarkan nimOrNip
     private void ambilDataDosen(String nimOrNip) {
         db.collection("users").whereEqualTo("nimOrNip", nimOrNip).get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
@@ -110,7 +113,7 @@ public class DashboardDosenActivity extends AppCompatActivity {
                 });
     }
 
-    // Ambil data jadwal mengajar dosen berdasarkan mata kuliah
+    // Mengambil data jadwal mengajar dosen berdasarkan mata kuliah
     private void ambilDataJadwal(String matkul) {
         db.collection("jadwal")
                 .whereEqualTo("matkul", matkul)  // Filter berdasarkan mata kuliah dosen
@@ -148,6 +151,7 @@ public class DashboardDosenActivity extends AppCompatActivity {
                 });
     }
 
+    // Setup bottom navigation view untuk menu navigasi
     private void setupBottomNavigation() {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
@@ -155,19 +159,22 @@ public class DashboardDosenActivity extends AppCompatActivity {
             int itemId = item.getItemId();
 
             if (itemId == R.id.menu_home) {
+                // Menampilkan pesan saat menu home dipilih
                 Toast.makeText(this, "Home dipilih", Toast.LENGTH_SHORT).show();
             } else if (itemId == R.id.menu_calender) {
+                // Navigasi ke halaman Academic Calendar
                 Intent intent = new Intent(this, AcademicCalendarActivity.class);
                 startActivity(intent);
             } else if (itemId == R.id.menu_profile) {
+                // Navigasi ke halaman Profile Dosen
                 Intent intent = new Intent(this, ProfileDosenActivity.class);
                 startActivity(intent);
             } else {
-                Log.e("DashboardDosenActivity", "Menu tidak dikenal");
+                // Jika menu tidak dikenali
+                Toast.makeText(this, "Menu tidak dikenal", Toast.LENGTH_SHORT).show();
             }
 
             return true;
         });
     }
-
 }

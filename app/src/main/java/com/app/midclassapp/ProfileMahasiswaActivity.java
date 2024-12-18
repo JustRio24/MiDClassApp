@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,6 +32,7 @@ public class ProfileMahasiswaActivity extends AppCompatActivity {
     FirebaseFirestore db;
     DocumentReference docRef;
 
+    // Mendeklarasikan elemen-elemen UI yang akan digunakan
     TextView jurusanTextView, kampusTextView, nimTextView, namaTextView, emailTextView, noTelpTextView, alamatTextView;
     ImageView profileImageView, editEmailIcon, editNoTelpIcon, editAlamatIcon;
     EditText emailEditText, noTelpEditText, AlamatEditText;
@@ -46,19 +46,24 @@ public class ProfileMahasiswaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        // Inisialisasi Firestore untuk mengambil data pengguna
         db = FirebaseFirestore.getInstance();
 
+        // Ambil nimOrNip dari SharedPreferences untuk mendapatkan identitas pengguna
         String nimOrNip = getSharedPreferences("MiDClassPrefs", MODE_PRIVATE)
                 .getString("nimOrNip", null);
 
+        // Cek apakah nimOrNip ada, jika tidak ada tampilkan pesan dan keluar dari aktivitas
         if (nimOrNip == null || nimOrNip.isEmpty()) {
             Toast.makeText(ProfileMahasiswaActivity.this, "User tidak terdaftar", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
+        // Mendapatkan referensi dokumen berdasarkan nimOrNip
         docRef = db.collection("users").document(nimOrNip);
 
+        // Menghubungkan elemen-elemen UI dengan ID yang sesuai
         jurusanTextView = findViewById(R.id.jurusanTextView);
         kampusTextView = findViewById(R.id.kampusTextView);
         nimTextView = findViewById(R.id.nimTextView);
@@ -75,28 +80,34 @@ public class ProfileMahasiswaActivity extends AppCompatActivity {
         AlamatEditText = findViewById(R.id.alamatEditText);
         editButton = findViewById(R.id.editButton);
 
+        // Sembunyikan input untuk edit dan tombol save pada awalnya
         emailEditText.setVisibility(View.GONE);
         noTelpEditText.setVisibility(View.GONE);
         AlamatEditText.setVisibility(View.GONE);
         editButton.setVisibility(View.GONE);
 
+        // Ambil data pengguna dari Firestore dan tampilkan di UI
         getUserData();
 
+        // Listener untuk mengedit email, noTelp, dan alamat
         editEmailIcon.setOnClickListener(v -> showEditText(emailEditText, emailTextView.getText().toString(), emailEditText));
         editNoTelpIcon.setOnClickListener(v -> showEditText(noTelpEditText, noTelpTextView.getText().toString(), noTelpEditText));
         editAlamatIcon.setOnClickListener(v -> showEditText(AlamatEditText, alamatTextView.getText().toString(), AlamatEditText));
 
+        // Listener untuk menyimpan perubahan yang sudah diedit
         editButton.setOnClickListener(v -> updateUserData());
 
-        // Tambahkan listener untuk mengganti foto profil
+        // Listener untuk mengubah foto profil
         profileImageView.setOnClickListener(v -> openImageChooser());
     }
 
     private void getUserData() {
+        // Mengambil data pengguna dari Firestore berdasarkan nimOrNip
         docRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
+                    // Ambil data yang ada di Firestore
                     String jurusan = document.getString("jurusan");
                     String email = document.getString("email");
                     String noTelp = document.getString("noTelp");
@@ -106,6 +117,7 @@ public class ProfileMahasiswaActivity extends AppCompatActivity {
                     String username = document.getString("username");
                     String base64Image = document.getString("profile_picture");
 
+                    // Menampilkan data yang diambil di UI
                     jurusanTextView.setText(jurusan);
                     emailTextView.setText(email);
                     noTelpTextView.setText(noTelp);
@@ -114,33 +126,32 @@ public class ProfileMahasiswaActivity extends AppCompatActivity {
                     nimTextView.setText(nimOrNip);
                     namaTextView.setText(username);
 
+                    // Menampilkan foto profil jika ada
                     if (base64Image != null && !base64Image.isEmpty()) {
                         try {
                             byte[] decodedString = Base64.decode(base64Image, Base64.DEFAULT);
-                            BitmapFactory.Options options = new BitmapFactory.Options();
-                            options.inSampleSize = 4;
-                            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length, options);
+                            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                             profileImageView.setImageBitmap(decodedByte);
                         } catch (Exception e) {
-                            Log.e("ProfileActivity", "Error decoding Base64 image", e);
+                            // Jika terjadi error saat decoding gambar
                         }
                     }
 
+                    // Jika data tidak ada, tampilkan pesan default
                     namaTextView.setText(username != null ? username : "Nama tidak ditemukan");
                     emailTextView.setText(email != null ? email : "E-mail tidak ditemukan");
                     noTelpTextView.setText(noTelp != null ? noTelp : "Nomor Telp tidak ditemukan");
                     alamatTextView.setText(alamat != null ? alamat : "Alamat tidak ditemukan");
 
-                } else {
-                    Log.d("Firestore", "Dokumen tidak ditemukan!");
                 }
             } else {
-                Log.d("Firestore", "Gagal dengan: ", task.getException());
+                // Jika gagal mengambil data
             }
         });
     }
 
     private void showEditText(EditText editText, String currentValue, EditText targetEditText) {
+        // Menampilkan EditText dan menyembunyikan TextView untuk mengedit data
         targetEditText.setVisibility(View.VISIBLE);
         targetEditText.setText(currentValue);
         editButton.setVisibility(View.VISIBLE);
@@ -155,6 +166,7 @@ public class ProfileMahasiswaActivity extends AppCompatActivity {
     }
 
     private void updateUserData() {
+        // Ambil data yang sudah diedit untuk disimpan kembali ke Firestore
         String newEmail = emailEditText.getVisibility() == View.VISIBLE
                 ? emailEditText.getText().toString()
                 : emailTextView.getText().toString();
@@ -167,23 +179,28 @@ public class ProfileMahasiswaActivity extends AppCompatActivity {
                 ? AlamatEditText.getText().toString()
                 : alamatTextView.getText().toString();
 
+        // Membuat Map untuk menyimpan perubahan yang akan disimpan ke Firestore
         Map<String, Object> updates = new HashMap<>();
         updates.put("email", newEmail);
         updates.put("noTelp", newNoTelp);
         updates.put("alamat", newAlamat);
 
+        // Mengupdate data di Firestore
         docRef.update(updates).addOnSuccessListener(aVoid -> {
+            // Jika berhasil memperbarui data, tampilkan pesan dan sembunyikan input
             Toast.makeText(ProfileMahasiswaActivity.this, "Data berhasil diperbarui", Toast.LENGTH_SHORT).show();
             emailTextView.setText(newEmail);
             noTelpTextView.setText(newNoTelp);
             alamatTextView.setText(newAlamat);
             hideEditFields();
         }).addOnFailureListener(e -> {
+            // Jika gagal memperbarui data, tampilkan pesan
             Toast.makeText(ProfileMahasiswaActivity.this, "Gagal memperbarui data", Toast.LENGTH_SHORT).show();
         });
     }
 
     private void hideEditFields() {
+        // Menyembunyikan input dan tombol simpan setelah data diperbarui
         emailEditText.setVisibility(View.GONE);
         noTelpEditText.setVisibility(View.GONE);
         AlamatEditText.setVisibility(View.GONE);
@@ -194,45 +211,41 @@ public class ProfileMahasiswaActivity extends AppCompatActivity {
     }
 
     private void openImageChooser() {
+        // Membuka galeri untuk memilih gambar
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        intent.setType("image/*");
         startActivityForResult(intent, PICK_IMAGE_REQUEST);
     }
 
-    // Method untuk menangani hasil pemilihan gambar
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            imageUri = data.getData();  // Menyimpan URI gambar yang dipilih
-
-            // Menampilkan gambar yang dipilih di ImageView
+            // Menangani gambar yang dipilih
+            imageUri = data.getData();
             try {
-                InputStream imageStream = getContentResolver().openInputStream(imageUri);
-                Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                profileImageView.setImageBitmap(selectedImage);
+                // Mengonversi gambar menjadi bitmap dan menampilkannya di ImageView
+                InputStream inputStream = getContentResolver().openInputStream(imageUri);
+                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                profileImageView.setImageBitmap(bitmap);
 
-                // Mengonversi gambar ke format Base64 dan mengupdate Firestore
-                uploadImageToFirestore(selectedImage);
-
+                // Mengubah gambar ke format Base64 dan mengupdate foto profil
+                updateProfileImage(bitmap);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    // Method untuk mengupload gambar ke Firestore setelah diubah
-    private void uploadImageToFirestore(Bitmap selectedImage) {
-        // Mengonversi gambar Bitmap ke Base64
+    private void updateProfileImage(Bitmap bitmap) {
+        // Mengonversi gambar ke format Base64
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        selectedImage.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
         byte[] byteArray = byteArrayOutputStream.toByteArray();
         String encodedImage = Base64.encodeToString(byteArray, Base64.DEFAULT);
 
-        // Update gambar profil di Firestore
+        // Menyimpan gambar profil baru ke Firestore
         Map<String, Object> updates = new HashMap<>();
         updates.put("profile_picture", encodedImage);
-
         docRef.update(updates).addOnSuccessListener(aVoid -> {
             Toast.makeText(ProfileMahasiswaActivity.this, "Foto profil berhasil diperbarui", Toast.LENGTH_SHORT).show();
         }).addOnFailureListener(e -> {

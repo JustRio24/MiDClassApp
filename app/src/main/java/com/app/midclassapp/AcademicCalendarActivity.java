@@ -1,12 +1,10 @@
 package com.app.midclassapp;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,47 +31,46 @@ public class AcademicCalendarActivity extends AppCompatActivity {
         setContentView(R.layout.activity_academic_calendar);
 
         // Inisialisasi Firestore dan komponen tampilan
-        db = FirebaseFirestore.getInstance();
-        recyclerView = findViewById(R.id.recyclerView);
-        progressBar = findViewById(R.id.progressBar);
-        noDataTextView = findViewById(R.id.noDataTextView);
+        db = FirebaseFirestore.getInstance(); // Menginisialisasi Firestore
+        recyclerView = findViewById(R.id.recyclerView); // Menghubungkan RecyclerView
+        progressBar = findViewById(R.id.progressBar); // Menghubungkan ProgressBar
+        noDataTextView = findViewById(R.id.noDataTextView); // Menghubungkan TextView untuk menampilkan pesan tidak ada data
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        events = new ArrayList<>();
-        adapter = new AcademicEventAdapter(events);
-        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this)); // Menetapkan layout manager untuk RecyclerView
+        events = new ArrayList<>(); // Membuat list untuk menyimpan data acara
+        adapter = new AcademicEventAdapter(events); // Menetapkan adapter untuk RecyclerView
+        recyclerView.setAdapter(adapter); // Menghubungkan adapter dengan RecyclerView
 
         // Memuat data dari Firestore
-        fetchAcademicCalendar();
+        fetchAcademicCalendar(); // Memanggil metode untuk mengambil data kalender akademik
     }
 
+    // Memuat kalender akademik dari Firestore
     private void fetchAcademicCalendar() {
-        progressBar.setVisibility(View.VISIBLE);
-        noDataTextView.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE); // Menampilkan ProgressBar saat memuat data
+        noDataTextView.setVisibility(View.GONE); // Menyembunyikan pesan jika data sedang dimuat
 
-        db.collection("academic_calendar")
-                .get()
+        db.collection("academic_calendar") // Mengambil data dari koleksi "academic_calendar"
+                .get() // Mengambil semua dokumen dari koleksi
                 .addOnCompleteListener(task -> {
-                    progressBar.setVisibility(View.GONE);
-                    if (task.isSuccessful()) {
-                        QuerySnapshot querySnapshot = task.getResult();
-                        if (querySnapshot != null && !querySnapshot.isEmpty()) {
-                            events.clear();
-                            for (QueryDocumentSnapshot document : querySnapshot) {
-                                String no = document.getString("no");
-                                String eventName = document.getString("event_name");
-                                String dateRange = document.getString("date_range");
+                    progressBar.setVisibility(View.GONE); // Menyembunyikan ProgressBar setelah data dimuat
+                    if (task.isSuccessful()) { // Mengecek apakah task berhasil
+                        QuerySnapshot querySnapshot = task.getResult(); // Mengambil hasil query
+                        if (querySnapshot != null && !querySnapshot.isEmpty()) { // Mengecek apakah ada data yang ditemukan
+                            events.clear(); // Menghapus data lama
+                            for (QueryDocumentSnapshot document : querySnapshot) { // Iterasi untuk setiap dokumen
+                                String no = document.getString("no"); // Mengambil nomor acara
+                                String eventName = document.getString("event_name"); // Mengambil nama acara
+                                String dateRange = document.getString("date_range"); // Mengambil rentang tanggal acara
 
-                                events.add(new AcademicEvent(no, eventName, dateRange));
+                                events.add(new AcademicEvent(no, eventName, dateRange)); // Menambahkan acara ke list
                             }
-                            adapter.notifyDataSetChanged();
+                            adapter.notifyDataSetChanged(); // Memberitahu adapter untuk memperbarui tampilan
                         } else {
-                            Log.e("AcademicCalendar", "Tidak ada data yang ditemukan di Firestore.");
-                            noDataTextView.setVisibility(View.VISIBLE);
+                            noDataTextView.setVisibility(View.VISIBLE); // Menampilkan pesan jika tidak ada data
                         }
                     } else {
-                        Log.e("AcademicCalendar", "Gagal memuat data dari Firestore.", task.getException());
-                        noDataTextView.setVisibility(View.VISIBLE);
+                        noDataTextView.setVisibility(View.VISIBLE); // Menampilkan pesan jika gagal memuat data
                     }
                 });
     }

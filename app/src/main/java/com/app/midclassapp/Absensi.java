@@ -11,6 +11,7 @@ public class Absensi {
     private String nimOrNip;
     private String namaMahasiswa;
 
+    // Konstruktor dengan semua parameter untuk ValidasiPresensiAdapter (Dosen)
     public Absensi(String documentId, String matkul, Timestamp timestamp, String keterangan, String fotoBase64, String nimOrNip) {
         this.documentId = documentId;
         this.matkul = matkul;
@@ -20,7 +21,7 @@ public class Absensi {
         this.nimOrNip = nimOrNip;
     }
 
-    // Konstruktor minimal (4 parameter)
+    // Konstruktor 4 parameter untuk HistoriAbsensiAdapter (mahasiswa)
     public Absensi(String matkul, Timestamp timestamp, String keterangan, String fotoBase64) {
         this.matkul =  matkul;
         this.timestamp = timestamp;
@@ -28,8 +29,6 @@ public class Absensi {
         this.fotoBase64 = fotoBase64;
     }
 
-
-    // Getter and Setter methods for all fields
     public String getDocumentId() {
         return documentId;
     }

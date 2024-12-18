@@ -1,10 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UploadTugasActivity">
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@drawable/bg_dashboard">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/headerPresensi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Upload Tugas/Materi"
+        android:textSize="25sp"
+        android:padding="10dp"
+        android:layout_marginBottom="18dp"
+        android:fontFamily="monospace"
+        android:textStyle="bold"
+        android:background="@color/biru_muda"
+        android:textAlignment="center"
+        android:textColor="@android:color/black" />
+
+    <EditText
+        android:id="@+id/edtTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Judul Tugas/Materi"
+        android:textStyle="italic"
+        android:textSize="16sp"
+        android:padding="12dp"
+        android:background="@drawable/rounded_edittext_2"
+        android:layout_marginBottom="16dp" />
+
+    <EditText
+        android:id="@+id/edtDescription"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:padding="12dp"
+        android:layout_marginBottom="16dp"
+        android:textSize="16sp"
+        android:gravity="start"
+        android:textStyle="italic"
+        android:background="@drawable/rounded_edittext_2"
+        android:hint="Instruksi atau Deskripsi"/>
+
+    <EditText
+        android:id="@+id/edtDeadline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Deadline (yyyy-MM-dd)"
+        android:textSize="16sp"
+        android:layout_marginBottom="20dp"
+        android:padding="12dp"
+        android:background="@drawable/rounded_edittext_2"/>
+
+    <Button
+        android:id="@+id/btnUploadTask"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Unggah" />
+
+</LinearLayout>

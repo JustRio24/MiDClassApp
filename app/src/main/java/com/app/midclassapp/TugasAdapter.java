@@ -1,5 +1,6 @@
 package com.app.midclassapp;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,43 +11,46 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class TugasAdapter extends RecyclerView.Adapter<TugasAdapter.TugasViewHolder> {
+public class TugasAdapter extends RecyclerView.Adapter<TugasAdapter.ViewHolder> {
 
-    private ArrayList<String> tugasList;
+    private Context context;
+    private ArrayList<TugasMateri> listMateriTugas;
 
-    public TugasAdapter(ArrayList<String> tugasList) {
-        this.tugasList = tugasList;
+    public TugasAdapter(Context context, ArrayList<TugasMateri> listMateriTugas) {
+        this.context = context;
+        this.listMateriTugas = listMateriTugas;
     }
 
     @NonNull
     @Override
-    public TugasViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_tugas, parent, false);
-        return new TugasViewHolder(view);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.item_tugas, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TugasViewHolder holder, int position) {
-        String tugas = tugasList.get(position);
-        holder.tvTugas.setText(tugas);
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        TugasMateri tugasMateri = listMateriTugas.get(position);
+        holder.tvTitle.setText(tugasMateri.getTitle());
+        holder.tvDescription.setText(tugasMateri.getDescription());
+        holder.tvDeadline.setText("Deadline: " + tugasMateri.getDeadline());
+        holder.tvMatkul.setText("Mata Kuliah: " + tugasMateri.getMatkul());
     }
 
     @Override
     public int getItemCount() {
-        return tugasList.size();
+        return listMateriTugas.size();
     }
 
-    public void updateTugasList(ArrayList<String> newTugasList) {
-        this.tugasList = newTugasList;
-        notifyDataSetChanged();
-    }
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        TextView tvTitle, tvDescription, tvDeadline, tvMatkul;
 
-    static class TugasViewHolder extends RecyclerView.ViewHolder {
-        TextView tvTugas;
-
-        public TugasViewHolder(@NonNull View itemView) {
+        public ViewHolder(View itemView) {
             super(itemView);
-            tvTugas = itemView.findViewById(R.id.tvTugas);
+            tvTitle = itemView.findViewById(R.id.tvTitle);
+            tvDescription = itemView.findViewById(R.id.tvDescription);
+            tvDeadline = itemView.findViewById(R.id.tvDeadline);
+            tvMatkul = itemView.findViewById(R.id.tvMatkul);
         }
     }
 }

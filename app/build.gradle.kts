@@ -50,6 +50,8 @@ dependencies {
     implementation("com.google.code.gson:gson:2.8.9")
     implementation("com.google.gms:google-services:4.3.15")
 
+
+
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)

@@ -6,180 +6,159 @@ import android.app.DatePickerDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.DocumentSnapshot;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 public class AdminRiwayatPresensiActivity extends AppCompatActivity {
 
+    private Spinner spinnerMatkul;
+    private EditText editTextNimOrNip;
+    private TextView tvSelectedDate;
+    private Button buttonFilter;
+    private RecyclerView recyclerViewHistori;
+    private ProgressBar progressBar;
+
     private FirebaseFirestore db;
-    private RecyclerView recyclerView;
     private RiwayatPresensiAdapter adapter;
     private List<Absensi> absensiList;
-    private List<Absensi> filteredAbsensi;
-    private ProgressBar progressBar;
-    private Button buttonFilter;
-    private Spinner spinnerMatkul;
-    private TextView tvSelectedDate;
-    private ImageView ivCalendarIcon;
-    private EditText editTextNimOrNip;
-    private String nimOrNip;
-    private String selectedDate = null;
+
+    private String selectedMatkul = "";
+    private String selectedNimOrNip = "";
+    private String selectedDate = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_riwayat_presensi);
 
-        db = FirebaseFirestore.getInstance();
-        absensiList = new ArrayList<>(); // Inisialisasi list histori absensi
-        filteredAbsensi = new ArrayList<>(); // Inisialisasi list histori absensi yang sudah difilter
-
         // Inisialisasi UI
-        recyclerView = findViewById(R.id.recyclerViewHistori);
-        progressBar = findViewById(R.id.progressBar);
-        buttonFilter = findViewById(R.id.button_filter);
         spinnerMatkul = findViewById(R.id.spinner_matkul);
-        tvSelectedDate = findViewById(R.id.tv_selected_date);
-        ivCalendarIcon = findViewById(R.id.iv_calendar_icon);
         editTextNimOrNip = findViewById(R.id.editTextNimOrNip);
+        tvSelectedDate = findViewById(R.id.tv_selected_date);
+        buttonFilter = findViewById(R.id.button_filter);
+        recyclerViewHistori = findViewById(R.id.recyclerViewHistori);
+        progressBar = findViewById(R.id.progressBar);
 
-        tvSelectedDate.setOnClickListener(v -> {
-            Calendar calendar = Calendar.getInstance();
-            new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
-                Calendar selectedCalendar = Calendar.getInstance();
-                selectedCalendar.set(year, month, dayOfMonth);
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                selectedDate = dateFormat.format(selectedCalendar.getTime());
-                tvSelectedDate.setText(selectedDate);
-            }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
-        });
+        recyclerViewHistori.setLayoutManager(new LinearLayoutManager(this));
+        absensiList = new ArrayList<>();
+        adapter = new RiwayatPresensiAdapter(absensiList);
+        recyclerViewHistori.setAdapter(adapter);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        db = FirebaseFirestore.getInstance();
 
-        loadAbsensiData();
+        // Mengambil histori presensi awal saat activity pertama kali dibuat
+        getHistoryPresensi();
 
-        buttonFilter.setOnClickListener(v -> {
-            String selectedMatkul = spinnerMatkul.getSelectedItem().toString();
-            String selectedDate = tvSelectedDate.getText().toString();
-            String nimOrNip = editTextNimOrNip.getText().toString(); // Ambil nilai dari EditText
+        // Event listener untuk memilih tanggal
+        tvSelectedDate.setOnClickListener(v -> showDatePicker());
 
-            if (selectedMatkul.equals("Pilih Mata Kuliah")) {
-                selectedMatkul = null; // Set null jika tidak ada mata kuliah yang dipilih
-            }
-
-            // Panggil fungsi filter
-            filterAbsensi(selectedMatkul, selectedDate, nimOrNip);
-        });
+        // Event listener untuk tombol filter
+        buttonFilter.setOnClickListener(v -> applyFilter());
     }
 
-    private void loadAbsensiData() {
-        absensiList = new ArrayList<>();
+    private void showDatePicker() {
+        final Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
 
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, (view, year1, month1, dayOfMonth) -> {
+            // Format tanggal menjadi "YYYY-MM-DD"
+            selectedDate = String.format("%04d-%02d-%02d", year1, month1 + 1, dayOfMonth);
+            tvSelectedDate.setText(selectedDate);
+        }, year, month, day);
+
+        datePickerDialog.show();
+    }
+
+    // Mengambil histori presensi dari Firestore
+    private void getHistoryPresensi() {
         db.collection("presensi")
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
+                    absensiList.clear(); // Clear daftar absensi sebelum mengisi dengan data baru
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                         // Ambil data presensi dari setiap dokumen
                         String nimOrNip = document.getString("nimOrNip");
+                        String matkul = document.getString("matkul");
+                        String keterangan = document.getString("keterangan");
+                        String fotoBase64 = document.getString("fotoBase64");  // Pastikan nama field sesuai
+                        String tanggal = formatTimestamp(document.getTimestamp("timestamp"));
                         Absensi absensi = new Absensi(
-                                document.getId(), // ID dokumen sebagai documentId
-                                document.getString("matkul"),
+                                document.getId(),  // ID dokumen sebagai documentId
+                                matkul,
                                 document.getTimestamp("timestamp"),
-                                document.getString("keterangan"),
-                                document.getString("photo"),
-                                nimOrNip, // Ganti nama mahasiswa dengan NIM
-                                formatTimestamp(document.getTimestamp("timestamp")) // Menambahkan tanggal sebagai string
+                                keterangan,
+                                fotoBase64,
+                                nimOrNip,  // Ganti nama mahasiswa dengan NIM
+                                tanggal // Menambahkan tanggal sebagai string
                         );
                         absensiList.add(absensi); // Tambahkan absensi ke list
                     }
-
-                    // Initialize the adapter here
-                    if (adapter == null) {
-                        adapter = new RiwayatPresensiAdapter(AdminRiwayatPresensiActivity.this, absensiList);
-                        recyclerView.setAdapter(adapter);
-                    }
-
-                    filterAbsensi(null, null, null); // Tidak memfilter apapun di awal
-                    adapter.notifyDataSetChanged();
+                    adapter.notifyDataSetChanged(); // Beri tahu adapter untuk memperbarui tampilan
                 })
-                .addOnFailureListener(e -> Toast.makeText(this, "Gagal mengambil data presensi.", Toast.LENGTH_SHORT).show());
+                .addOnFailureListener(e -> Toast.makeText(this, "Gagal mengambil data presensi.", Toast.LENGTH_SHORT).show()); // Menangani kegagalan
     }
 
+    private void applyFilter() {
+        selectedMatkul = spinnerMatkul.getSelectedItem().toString();
+        selectedNimOrNip = editTextNimOrNip.getText().toString().trim();
 
-    private void filterAbsensi(String matkul, String tanggal, String nimOrNip) {
+        // Menampilkan ProgressBar
         progressBar.setVisibility(View.VISIBLE);
-        recyclerView.setVisibility(View.GONE);
+        recyclerViewHistori.setVisibility(View.GONE);
 
-        com.google.firebase.firestore.Query query = db.collection("presensi");
-        boolean filterApplied = false;
+        Query query = db.collection("presensi");
 
-        if (matkul != null && !matkul.isEmpty() && !matkul.equals("Pilih Mata Kuliah")) {
-            query = query.whereEqualTo("matkul", matkul);
-            filterApplied = true;
+        // Validasi dan penambahan filter
+        if (!selectedMatkul.isEmpty() && !selectedMatkul.equals("Pilih Mata Kuliah")) {
+            query = query.whereEqualTo("matkul", selectedMatkul);
         }
 
-        if (tanggal != null && !tanggal.isEmpty() && !tanggal.equals("Pilih Tanggal")) {
-            query = query.whereEqualTo("tanggal", tanggal);
-            filterApplied = true;
+        if (!selectedNimOrNip.isEmpty()) {
+            query = query.whereEqualTo("nimOrNip", selectedNimOrNip);
         }
 
-        if (nimOrNip != null && !nimOrNip.isEmpty()) {
-            query = query.whereEqualTo("nimOrNip", nimOrNip);
-            filterApplied = true;
+        if (!selectedDate.isEmpty()) {
+            query = query.whereEqualTo("tanggal", selectedDate);
         }
 
-        if (!filterApplied) {
-            // Tidak ada filter yang diterapkan, maka tampilkan semua data
-        }
-
-        query.get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful() && task.getResult() != null) {
-                        filteredAbsensi.clear();  // Kosongkan filtered list agar data yang difilter diperbarui
-                        for (DocumentSnapshot document : task.getResult()) {
-                            Absensi absensi = document.toObject(Absensi.class);
-                            if (absensi != null) {
-                                absensi.setDocumentId(document.getId());
-                                filteredAbsensi.add(absensi);
-                            }
-                        }
-                        // Memperbarui RecyclerView setelah data difilter
-                        adapter.notifyDataSetChanged();
-                        recyclerView.setVisibility(View.VISIBLE);
-                    } else {
-                        Toast.makeText(AdminRiwayatPresensiActivity.this, "Gagal memfilter data", Toast.LENGTH_SHORT).show();
-                    }
-                    progressBar.setVisibility(View.GONE);
-                });
+        // Batasi hasil query untuk mengoptimalkan waktu loading (dengan limit)
+        query.limit(100).get().addOnSuccessListener(queryDocumentSnapshots -> {
+            progressBar.setVisibility(View.GONE);
+            absensiList.clear(); // Clear previous results
+            if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
+                for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                    Absensi absensi = document.toObject(Absensi.class);
+                    absensiList.add(absensi); // Menambahkan absensi ke daftar
+                }
+                recyclerViewHistori.setVisibility(View.VISIBLE);
+                adapter.notifyDataSetChanged(); // Memperbarui tampilan
+            } else {
+                Toast.makeText(this, "Data tidak ditemukan.", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(e -> {
+            progressBar.setVisibility(View.GONE);
+            Toast.makeText(this, "Gagal memuat data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        });
     }
 
-    // Helper method untuk mendekode gambar yang disimpan dalam format Base64
-    public static Bitmap decode64(String encodedImage) {
-        byte[] decodedBytes = Base64.decode(encodedImage, Base64.DEFAULT); // Decode Base64 ke byte array
-        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length); // Mengubah byte array menjadi gambar
-    }
 }

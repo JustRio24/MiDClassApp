@@ -81,6 +81,14 @@ public class Absensi {
         this.keterangan = keterangan;
     }
 
+    public String getPhoto() {
+        return fotoBase64;
+    }
+
+    public void setPhoto(String photo){
+        this.fotoBase64 = photo;
+    }
+
     public String getFotoBase64() {
         return fotoBase64;
     }

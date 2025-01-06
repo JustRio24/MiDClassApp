@@ -22,9 +22,11 @@ import java.util.Locale;
 public class HistoriAbsensiAdapter extends RecyclerView.Adapter<HistoriAbsensiAdapter.AbsensiViewHolder> {
 
     private List<Absensi> historiAbsensi; // List yang menyimpan data absensi
+    private List<Absensi> historiAbsensiFiltered; // List untuk menyimpan data hasil filter
 
     public HistoriAbsensiAdapter(List<Absensi> historiAbsensi) {
         this.historiAbsensi = historiAbsensi; // Konstruktor untuk inisialisasi list absensi
+        this.historiAbsensiFiltered = historiAbsensi; // Secara default, data yang ditampilkan adalah historiAbsensi
     }
 
     @NonNull
@@ -38,7 +40,7 @@ public class HistoriAbsensiAdapter extends RecyclerView.Adapter<HistoriAbsensiAd
     @Override
     public void onBindViewHolder(@NonNull AbsensiViewHolder holder, int position) {
         // Ambil data absensi berdasarkan posisi
-        Absensi absensi = historiAbsensi.get(position);
+        Absensi absensi = historiAbsensiFiltered.get(position);
 
         // Set data absensi ke komponen UI
         holder.matkulTextView.setText(absensi.getMatkul());
@@ -57,7 +59,33 @@ public class HistoriAbsensiAdapter extends RecyclerView.Adapter<HistoriAbsensiAd
 
     @Override
     public int getItemCount() {
-        return historiAbsensi.size(); // Mengembalikan jumlah item di list
+        return historiAbsensiFiltered.size(); // Mengembalikan jumlah item di list yang sudah difilter
+    }
+
+    // Method untuk memperbarui data adapter dengan data baru
+    public void updateData(List<Absensi> newData) {
+        historiAbsensi.clear(); // Membersihkan data lama
+        historiAbsensi.addAll(newData); // Menambahkan data baru
+        historiAbsensiFiltered = historiAbsensi; // Menyimpan hasil filter terbaru
+        notifyDataSetChanged(); // Memberitahu adapter untuk memperbarui tampilan
+    }
+
+    // Method untuk melakukan filter data berdasarkan kriteria tertentu
+    public void filterData(String keyword) {
+        // Jika kata kunci kosong, kembalikan ke data asli
+        if (keyword == null || keyword.isEmpty()) {
+            historiAbsensiFiltered = historiAbsensi;
+        } else {
+            // Filter data yang sesuai dengan keyword
+            historiAbsensiFiltered.clear();
+            for (Absensi absensi : historiAbsensi) {
+                if (absensi.getMatkul().toLowerCase().contains(keyword.toLowerCase()) ||
+                        absensi.getKeterangan().toLowerCase().contains(keyword.toLowerCase())) {
+                    historiAbsensiFiltered.add(absensi);
+                }
+            }
+        }
+        notifyDataSetChanged(); // Update tampilan setelah filter
     }
 
     // Helper method untuk memformat timestamp menjadi string dengan format yang diinginkan

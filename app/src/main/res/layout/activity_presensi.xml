@@ -23,7 +23,7 @@
             android:textStyle="bold"
             android:background="@color/biru_muda"
             android:textAlignment="center"
-            android:textColor="@android:color/black" />
+            android:textColor="#000000" />
 
         <!-- Pilihan Mata Kuliah -->
         <TextView
@@ -38,15 +38,15 @@
             android:layout_marginTop="20dp"
             android:padding="10dp" />
 
+        <!-- Pilihan Keterangan Kehadiran -->
         <Spinner
             android:id="@+id/spinnerMatkul"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_marginBottom="20dp"
             android:background="@color/pink_muda2"
-            android:entries="@array/matkul_array"
-            android:layout_marginBottom="20dp"/>
+            android:entries="@array/matkul_array" />
 
-        <!-- Pilihan Keterangan Kehadiran -->
         <TextView
             android:id="@+id/labelKeterangan"
             android:layout_width="match_parent"

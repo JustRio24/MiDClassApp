@@ -1,10 +1,12 @@
 package com.app.midclassapp;
 
+import android.app.DatePickerDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Base64;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +19,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -26,11 +29,14 @@ public class ValidasiPresensiActivity extends AppCompatActivity {
     private RecyclerView historyRecyclerView; // RecyclerView untuk menampilkan data histori presensi
     private ValidasiPresensiAdapter historyAdapter; // Adapter untuk RecyclerView
     private ArrayList<Absensi> historyAbsensi; // List untuk menyimpan data histori presensi
+    private ArrayList<Absensi> filteredAbsensi; // List untuk menyimpan data histori presensi yang sudah difilter
     private Map<String, Absensi> selectedAbsensiMap; // Map untuk menyimpan absensi yang dipilih untuk divalidasi
 
     private FirebaseFirestore db; // Instans Firestore untuk berinteraksi dengan database
     private String matkulDosen; // Mata kuliah yang diajarkan oleh dosen
     private String nimOrNip; // NIM/NIP dosen
+
+    private TextView tvSelectedDate; // TextView untuk menampilkan tanggal yang dipilih
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +45,7 @@ public class ValidasiPresensiActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance(); // Inisialisasi Firestore
         historyAbsensi = new ArrayList<>(); // Inisialisasi list histori absensi
+        filteredAbsensi = new ArrayList<>(); // Inisialisasi list histori absensi yang sudah difilter
         selectedAbsensiMap = new HashMap<>(); // Inisialisasi map untuk menyimpan absensi yang dipilih
 
         // Ambil nimOrNip dari SharedPreferences untuk mengidentifikasi dosen
@@ -52,12 +59,18 @@ public class ValidasiPresensiActivity extends AppCompatActivity {
         // Setup RecyclerView
         historyRecyclerView = findViewById(R.id.historyRecyclerView); // Menemukan RecyclerView dari layout
         historyRecyclerView.setLayoutManager(new LinearLayoutManager(this)); // Set layout manager
-        historyAdapter = new ValidasiPresensiAdapter(this, historyAbsensi, selectedAbsensiMap); // Inisialisasi adapter
+        historyAdapter = new ValidasiPresensiAdapter(this, filteredAbsensi, selectedAbsensiMap); // Inisialisasi adapter
         historyRecyclerView.setAdapter(historyAdapter); // Set adapter ke RecyclerView
 
         // Tombol Validasi yang digunakan untuk memvalidasi absensi yang dipilih
         Button btnValidasi = findViewById(R.id.btnValidasi);
         btnValidasi.setOnClickListener(v -> validasiPresensi()); // Menambahkan event listener ke tombol
+
+        // TextView untuk memilih tanggal
+        tvSelectedDate = findViewById(R.id.tv_selected_date);
+
+        // Listener untuk TextView (memunculkan DatePicker)
+        tvSelectedDate.setOnClickListener(v -> showDatePickerDialog(date -> tvSelectedDate.setText(date)));
 
         // Ambil mata kuliah dosen dari Firestore
         getMatkulDosen();
@@ -93,10 +106,12 @@ public class ValidasiPresensiActivity extends AppCompatActivity {
                                 document.getTimestamp("timestamp"),
                                 document.getString("keterangan"),
                                 document.getString("photo"),
-                                nimOrNip // Ganti nama mahasiswa dengan NIM
+                                nimOrNip, // Ganti nama mahasiswa dengan NIM
+                                formatTimestamp(document.getTimestamp("timestamp")) // Menambahkan tanggal sebagai string
                         );
                         historyAbsensi.add(absensi); // Tambahkan absensi ke list
                     }
+                    filterByDate(); // Filter data berdasarkan tanggal jika sudah ada histori presensi
                     historyAdapter.notifyDataSetChanged(); // Beri tahu adapter untuk memperbarui tampilan
                 })
                 .addOnFailureListener(e -> Toast.makeText(this, "Gagal mengambil data presensi.", Toast.LENGTH_SHORT).show()); // Menangani kegagalan
@@ -123,10 +138,48 @@ public class ValidasiPresensiActivity extends AppCompatActivity {
         }
     }
 
+    // Fungsi untuk memfilter histori berdasarkan tanggal yang dipilih
+    private void filterByDate() {
+        String selectedDate = tvSelectedDate.getText().toString();
+        if (!selectedDate.equals("Pilih Tanggal")) {
+            filteredAbsensi.clear();
+            for (Absensi absensi : historyAbsensi) {
+                if (absensi.getTanggal().equals(selectedDate)) {
+                    filteredAbsensi.add(absensi); // Menambahkan absensi yang cocok dengan tanggal ke filteredAbsensi
+                }
+            }
+        } else {
+            filteredAbsensi.clear();
+            filteredAbsensi.addAll(historyAbsensi); // Jika tidak ada filter, tampilkan semua histori
+        }
+        historyAdapter.notifyDataSetChanged();
+    }
+
+    // Fungsi untuk memunculkan DatePickerDialog
+    private void showDatePickerDialog(DatePickerCallback callback) {
+        Calendar calendar = Calendar.getInstance();
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                (view, year, month, dayOfMonth) -> {
+                    // Format tanggal ke bentuk "YYYY-MM-DD"
+                    String formattedDate = year + "-" + String.format("%02d", (month + 1)) + "-" + String.format("%02d", dayOfMonth);
+                    callback.onDateSelected(formattedDate);
+                    filterByDate(); // Filter data setelah tanggal dipilih
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH));
+        datePickerDialog.show();
+    }
+
     // Helper method untuk memformat timestamp menjadi string dengan format yang diinginkan
     public static String formatTimestamp(Timestamp timestamp) {
         if (timestamp == null) return "N/A"; // Jika timestamp null, return "N/A"
-        return new SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.getDefault()).format(timestamp.toDate()); // Format timestamp
+        return new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(timestamp.toDate()); // Format timestamp
+    }
+
+    // Interface untuk callback tanggal
+    interface DatePickerCallback {
+        void onDateSelected(String date);
     }
 
     // Helper method untuk mendekode gambar yang disimpan dalam format Base64

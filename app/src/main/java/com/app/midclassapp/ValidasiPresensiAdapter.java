@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Map;
 
+// Adapter yang menghubungkan data jadwal dengan tampilan, memungkinkan data ditampilkan dalam format yang rapi di UI
 public class ValidasiPresensiAdapter extends RecyclerView.Adapter<ValidasiPresensiAdapter.ViewHolder> {
 
     private Context context; // Context untuk mengakses resources dan layout inflater

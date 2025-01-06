@@ -44,7 +44,7 @@ public class ProfileMahasiswaActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.activity_profile_mahasiswa);
 
         // Inisialisasi Firestore untuk mengambil data pengguna
         db = FirebaseFirestore.getInstance();

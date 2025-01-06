@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@color/putih"
+    android:layout_margin="5dp"
+    android:padding="10dp">
+
+    <ImageView
+        android:id="@+id/fotoPresensiImageView"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/ic_placeholder"
+        android:layout_gravity="center_vertical"
+        android:contentDescription="Foto Mahasiswa" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:paddingStart="16dp">
+
+        <TextView
+            android:id="@+id/nimOrNipTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="NIM"
+            android:textStyle="bold"
+            android:textSize="16sp" />
+
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#DADADA"
+            android:layout_marginBottom="1dp" />
+
+        <TextView
+            android:id="@+id/matkulTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:text="Mata Kuliah"/>
+
+        <TextView
+            android:id="@+id/tanggalTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Timestamp"/>
+
+        <TextView
+            android:id="@+id/keteranganTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Keterangan"
+            android:textSize="16sp"
+            android:layout_marginEnd="16dp" />
+    </LinearLayout>
+</LinearLayout>

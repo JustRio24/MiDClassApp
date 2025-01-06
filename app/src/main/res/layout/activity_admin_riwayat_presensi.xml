@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HistoriAbsensiActivity"
+    tools:context=".AdminRiwayatPresensiActivity"
     android:background="@drawable/bg_dashboard">
 
     <LinearLayout
@@ -12,12 +12,12 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Header untuk histori absensi -->
+        <!-- Header -->
         <TextView
-            android:id="@+id/headerPresensi"
+            android:id="@+id/headerPresensiMhs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Histori Absensi"
+            android:text="Riwayat Presensi Mahasiswa"
             android:textSize="22sp"
             android:padding="10dp"
             android:fontFamily="monospace"
@@ -29,12 +29,24 @@
 
         <!-- Spinner untuk Mata Kuliah -->
         <Spinner
-            android:id="@+id/spinner_course"
+            android:id="@+id/spinner_matkul"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:entries="@array/matkul_array"
             android:background="@drawable/rounded_edittext"
             android:layout_marginBottom="16dp" />
+
+        <!-- EditText untuk NimOrNip -->
+        <EditText
+            android:id="@+id/editTextNimOrNip"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="Masukkan NIM/NIP"
+            android:inputType="text"
+            android:background="@drawable/rounded_edittext"
+            android:layout_marginBottom="16dp"
+            android:padding="10dp"
+            android:textColor="@android:color/black" />
 
         <!-- Pemicu untuk memilih tanggal -->
         <LinearLayout

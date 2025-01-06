@@ -16,6 +16,12 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
@@ -29,6 +35,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MiDClassApp"
         tools:targetApi="31">
+        <activity
+            android:name=".AdminRiwayatPresensiActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AdminAcademicCalendarActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AdminJadwalActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProfileAdminActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DashboardAdminActivity"
+            android:exported="false" />
         <activity
             android:name=".UploadTugasActivity"
             android:exported="false" />
@@ -71,7 +92,6 @@
         <activity
             android:name=".DashboardDosenActivity"
             android:exported="true" /> <!-- Dashboard Dosen -->
-
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.app.miclassapp.provider"

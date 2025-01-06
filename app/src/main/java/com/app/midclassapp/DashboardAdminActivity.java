@@ -16,10 +16,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-// Activity Untuk Dashboard Mahasiswa
-public class DashboardMahasiswaActivity extends AppCompatActivity {
+// Activity Untuk Dashboard Admin
+public class DashboardAdminActivity extends AppCompatActivity {
 
-    private TextView dashboardUserName, dashboardJurusan, dashboardKampus, sksTempuhValue, statusValue;
+    private TextView dashboardUserName, dashboardJurusan, dashboardKampus;
     private ImageView logoImageView, iconProfile;
 
     private FirebaseFirestore db;
@@ -27,7 +27,7 @@ public class DashboardMahasiswaActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dashboard_mahasiswa);
+        setContentView(R.layout.activity_dashboard_admin);
 
         // Inisialisasi instance Firestore untuk mengelola database
         db = FirebaseFirestore.getInstance();
@@ -73,8 +73,7 @@ public class DashboardMahasiswaActivity extends AppCompatActivity {
                         String username = document.getString("username");
                         String jurusan = document.getString("jurusan");
                         String kampus = document.getString("kampus");
-                        String sks = document.getString("sks");
-                        String status = document.getString("status");
+                        String role = document.getString("role");
                         String base64Image = document.getString("profile_picture");
 
                         // Jika ada gambar profil, dekode dari base64 dan tampilkan
@@ -94,8 +93,6 @@ public class DashboardMahasiswaActivity extends AppCompatActivity {
                         dashboardUserName.setText(username != null ? username : "Nama tidak ditemukan");
                         dashboardJurusan.setText(jurusan != null ? jurusan : "Jurusan tidak ditemukan");
                         dashboardKampus.setText(kampus != null ? kampus : "Kampus tidak ditemukan");
-                        sksTempuhValue.setText(sks != null ? sks : "0");
-                        statusValue.setText(status != null ? status : "Tidak diketahui");
                     } else {
                         Toast.makeText(this, "Data pengguna tidak ditemukan", Toast.LENGTH_SHORT).show();
                     }
@@ -106,7 +103,7 @@ public class DashboardMahasiswaActivity extends AppCompatActivity {
     }
 
     /*
-     * Inisialisasi elemen UI dari layout activity_dashboard_mahasiswa.
+     * Inisialisasi elemen UI dari layout activity_dashboard_admin.
      * Method ini digunakan untuk menghubungkan elemen UI di XML ke variabel dalam kode Java.
      */
     private void initializeViews() {
@@ -115,9 +112,6 @@ public class DashboardMahasiswaActivity extends AppCompatActivity {
         dashboardKampus = findViewById(R.id.dashboardKampus);
         logoImageView = findViewById(R.id.logoImageView);
         iconProfile = findViewById(R.id.iconProfile);
-
-        sksTempuhValue = findViewById(R.id.sksTempuhValue);
-        statusValue = findViewById(R.id.statusValue);
     }
 
     /*
@@ -139,15 +133,11 @@ public class DashboardMahasiswaActivity extends AppCompatActivity {
                         String username = document.getString("username");
                         String jurusan = document.getString("jurusan");
                         String kampus = document.getString("kampus");
-                        String sks = document.getString("sks");
-                        String status = document.getString("status");
 
                         // Tampilkan data pengguna di elemen UI
                         dashboardUserName.setText(username != null ? username : "Nama tidak ditemukan");
                         dashboardJurusan.setText(jurusan != null ? jurusan : "Jurusan tidak ditemukan");
                         dashboardKampus.setText(kampus != null ? kampus : "Kampus tidak ditemukan");
-                        sksTempuhValue.setText(sks != null ? sks : "0");
-                        statusValue.setText(status != null ? status : "Tidak diketahui");
                     } else {
                         Toast.makeText(this, "Data pengguna tidak ditemukan", Toast.LENGTH_SHORT).show();
                     }
@@ -158,31 +148,25 @@ public class DashboardMahasiswaActivity extends AppCompatActivity {
     }
 
     /*
-     * Menyiapkan tindakan pada menu di dashboard, seperti Presensi, Jadwal, Tugas, dan Riwayat.
+     * Menyiapkan tindakan pada menu di dashboard admin, seperti Update Jadwal, Update Kalender, Riwayat, dll.
      * Setiap menu akan diarahkan ke activity yang sesuai.
      */
     private void setupMenuActions() {
-        LinearLayout menuPresensi = findViewById(R.id.menuPresensi);
-        menuPresensi.setOnClickListener(view -> {
-            Intent intent = new Intent(this, PresensiActivity.class);
+        LinearLayout menuUpdateJadwal = findViewById(R.id.menuUpdateJadwal);
+        menuUpdateJadwal.setOnClickListener(view -> {
+            Intent intent = new Intent(this, AdminJadwalActivity.class);
             startActivity(intent);
         });
 
-        LinearLayout menuJadwal = findViewById(R.id.menuJadwal);
-        menuJadwal.setOnClickListener(view -> {
-            Intent intent = new Intent(this, JadwalActivity.class);
-            startActivity(intent);
-        });
-
-        LinearLayout menuNilai = findViewById(R.id.menuTugas);
-        menuNilai.setOnClickListener(view -> {
-            Intent intent = new Intent(this, TugasActivity.class);
+        LinearLayout menuUpdateCalendar = findViewById(R.id.menuUpdateCalendar);
+        menuUpdateCalendar.setOnClickListener(view -> {
+            Intent intent = new Intent(this, AdminAcademicCalendarActivity.class);
             startActivity(intent);
         });
 
         LinearLayout menuRiwayat = findViewById(R.id.menuRiwayat);
         menuRiwayat.setOnClickListener(view -> {
-            Intent intent = new Intent(this, HistoriAbsensiActivity.class);
+            Intent intent = new Intent(this, AdminRiwayatPresensiActivity.class);
             startActivity(intent);
         });
 
@@ -192,13 +176,12 @@ public class DashboardMahasiswaActivity extends AppCompatActivity {
         });
 
         iconProfile.setOnClickListener(view -> {
-            Intent intent = new Intent(this, ProfileMahasiswaActivity.class);
+            Intent intent = new Intent(this, ProfileAdminActivity.class);
             startActivity(intent);
         });
     }
 
-
-    // Menyiapkan navigasi bawah untuk berpindah antar fitur, seperti Home, Kalender Akademik, dan Profil.
+    // Menyiapkan navigasi bawah untuk berpindah antar fitur, seperti Home, Kalender Akademik, dan Profil Admin.
     private void setupBottomNavigation() {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
@@ -211,7 +194,7 @@ public class DashboardMahasiswaActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, AcademicCalendarActivity.class);
                 startActivity(intent);
             } else if (itemId == R.id.menu_profile) {
-                Intent intent = new Intent(this, ProfileMahasiswaActivity.class);
+                Intent intent = new Intent(this, ProfileAdminActivity.class);
                 startActivity(intent);
             } else {
                 Toast.makeText(this, "Menu tidak dikenal", Toast.LENGTH_SHORT).show();
